@@ -1,0 +1,2 @@
+INSERT into studenti (Ime,Prezime,Spol,JMBAG,OIB) values ("","","","","")
+Insert into dodatnipodacistudent (StudentId,Adresa,PBR,Grad) values(0,"",00000,"")
