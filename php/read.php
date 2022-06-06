@@ -3,8 +3,9 @@ include "connectionDb.php";
 include "classes.php";
 header('Access-Control-Allow-Headers: *');
 header('Access-Control-Allow-Origin: *');
-header('Content-type: text/json');
-header('Content-type: application/json; charset=utf-8');
+header('Content-type: text/json; charset=utf-8');
+//header('Content-Type: text/html; charset=utf-8');
+
 
 
 if(isset($_POST['json']))
@@ -99,7 +100,8 @@ switch ($_POST['json']) {
                 $result = $oConnection->query($query);
 
                 $oRow = $result->fetch(PDO::FETCH_BOTH);
-                
+               // echo ($oRow['Prezime']);
+
                 $id = $oRow['Id'];
                 $i = utf8_encode($oRow['Ime']);
                 $p = utf8_encode($oRow['Prezime']);
@@ -125,9 +127,7 @@ switch ($_POST['json']) {
                 $soba = new Soba($id,$bs,$kat,$bm,$tip); 
 
                 $array = new StudentSobaList($soba,$student);
-               // array_push($array,$soba);
-              //  array_push($array,$student);
-
+             
                 echo json_encode($array);
                 break;
 }
@@ -164,7 +164,7 @@ function VratiSobe()
 
 function VratiStudente()
 {
-    header('Content-type: application/json; charset=utf-8');
+    //header('Content-type: application/json; charset=utf-8');
       include "connectionDb.php";
       //$query = "Select sobe.Id,sobe.BrojSobe,sobe.Kat,sobe.BrojMjesta,sobe.Tip,studenti.Id as StudentId,studenti.Ime,studenti.Prezime from sobe left join studentposobi on sobe.Id = studentposobi.SobaId left join studenti on studentposobi.StudentId = studenti.Id ";
       $query = "Select * from studenti";

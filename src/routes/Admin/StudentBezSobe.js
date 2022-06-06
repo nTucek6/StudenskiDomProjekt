@@ -1,5 +1,6 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
+import addbnt from '../../img/add.png';
 
 export default function StudentBezSobe()
 {
@@ -35,24 +36,24 @@ export default function StudentBezSobe()
       
         let i = 1;
         const list = studenti.map((student) => (
-            <tr key={student.Id.toString()}>
+            <tr key={student.Id.toString()} className="text-center">
                 <td>{i++}</td>
                 <td>{student.Ime}</td>
                 <td>{student.Prezime}</td>
                 <td>{student.OIB}</td>
-                
+                <td><img id="BtnHover" src={addbnt}/></td>
             </tr>
                 )) 
             
         return(
         <table className="container table mt-5">
             <thead>
-                <tr>
-                    <td>Rbr</td>
-                    <td>Ime</td>
-                    <td>Prezime</td>
-                    <td>OIB</td>
-                    
+                <tr className="text-center">
+                    <th>Rbr</th>
+                    <th>Ime</th>
+                    <th>Prezime</th>
+                    <th>OIB</th>
+                    <th>Dodaj studenta u sobu</th>
                 </tr>
             </thead>
             <tbody>

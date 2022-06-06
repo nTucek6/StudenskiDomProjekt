@@ -6,6 +6,7 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import Modal from 'react-modal';
 import React from 'react';
+import trashbin from '../../img/trash-can.png';
 //import { Button } from "bootstrap";
 
 
@@ -14,11 +15,13 @@ import React from 'react';
 export default function StudentiPoSobama()
 {
     const [sobe, setData] = useState(null);
+
+    const [currentPage,setCurrentPage] = useState(1);
+    const [postPerPage] = useState(10);
+
     //const [studentiPoSobi,setSPS] = useState(null);
     const readUrl = "http://localhost/studenskidom/php/read.php";
-
     useEffect(() => {UcitajPodatke();}, []);
-
     async function UcitajPodatke()
         {
                 axios({
@@ -41,15 +44,8 @@ export default function StudentiPoSobama()
                     });   
         }
 
-
     if (!sobe)
     {
-        /*
-        const error = 
-        (
-            <h1 className="text-center">Error 404</h1>
-
-        ); */
         return null;
     }
 
@@ -100,49 +96,82 @@ export default function StudentiPoSobama()
         </div>
       ); */
 
-      
-    let i = 1;
-    const list = sobe.map((soba) => (
-        <tr key={soba.Soba.Id.toString()} >
-            <td>{i++}</td>
-            <td>{soba.Soba.Kat}</td>
-            <td>{soba.Soba.BrojSobe}</td>
-            <td>{soba.Soba.BrojMjesta}</td>
-            <td>{soba.Soba.Tip}</td>
-            <td >{soba.Studenti}</td>
-            <td><i className="fa fa-trash" aria-hidden="true"></i></td>
-        </tr>
-            )) 
+      const Posts =({posts,i}) => 
+      {
+      //let i = 1;
+        let list = posts.map((soba) => (
+            <tr key={soba.Soba.Id.toString()} className="text-center" >
+                <td>{i++}</td>
+                <td>{soba.Soba.Kat}</td>
+                <td>{soba.Soba.BrojSobe}</td>
+                <td>{soba.Soba.BrojMjesta}</td>
+                <td>{soba.Soba.Tip}</td>
+                <td >{soba.Studenti}</td>
+                <td ><img id="BtnHover"  src={trashbin}/ ></td></tr>
+                )); 
+          return list;
+      }
 
-            
+     
+
+  const indexOfLastPost = currentPage * postPerPage;
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+  const currentPost = sobe.slice(indexOfFirstPost,indexOfLastPost);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
+  const Pagination = ({postPerPage,totalPosts,paginate}) =>
+  {
+    const pageNumbers = [];
+
+    for(let i=1; i<=Math.ceil(totalPosts/postPerPage);i++)
+    {
+      pageNumbers.push(i);
+    }
+
     return(
-        <div className="container mt-5">
-      <table className="table ">
-        <thead>
-            <tr>
-                <td>Rbr</td>
-                <td>Kat</td>
-                <td>Soba</td>
-                <td>Broj mjesta</td>
-                <td>Tip</td>
-                <td>Studenti</td>
-                <td>Obriši</td>
-            </tr>
-        </thead>
-        <tbody>
-        {list}
-        </tbody>
-    </table>
-        </div>); 
-    
-    
+        <tr className="pagination">
+      {pageNumbers.map(number =>(
+        <td key={number} className="page-item">
+          <button onClick={()=>paginate(number)} href='' className="page-link">{number}</button>
+        </td>
+      ))}
+        </tr>
+    )
+  }
 
+  return(
+  <div className="container mt-5">
+  <div className="table-responsive">
+  <table className="table" >
+  <thead>
+  <tr className="text-center">
+  <th>Rbr</th>
+  <th>Kat</th>
+  <th>Soba</th>
+  <th>Broj mjesta</th>
+  <th>Tip</th>
+  <th>Studenti</th>
+  <th>Obriši studenta</th>
+  </tr>
+  </thead>
+  <tbody>
+  <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
+  <Pagination postPerPage={postPerPage} totalPosts={sobe.length} paginate={paginate} />
+  </tbody>
+  
+  </table>
+  </div>
+  </div>); 
+ 
 }
 
 
 function DeleteFromRoomModal()
 {
-
+////<tfoot><tr><td><button>Prev</button></td><td><button>Next</button></td></tr></tfoot>
   const customStyles = {
     content: {
       top: '50%',

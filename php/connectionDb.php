@@ -1,5 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+//header('Content-Type: text/html; charset=utf-8');
 
 $host = '127.0.0.1';
 $dbName = "vuv_studom";
@@ -9,7 +10,7 @@ $password = "";
 try
 {
 $oConnection = new PDO("mysql:host=$host;dbname=$dbName", $username, $password);
-//echo "Connected to $dbName at $host successfully.";
+//;charset=utf8
 }
 catch (PDOException $pe)
 {

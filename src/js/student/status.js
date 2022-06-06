@@ -34,12 +34,14 @@ export default function StudentInfo()
     if(!RoomInfo) return null;
 
     return(
-       <div className="container">
+       <div className="container mt-5">
+         <div className="styling text-center">
         <h3>Student: {RoomInfo.Studenti.Ime + " " +RoomInfo.Studenti.Prezime}</h3>
         <h3>Soba: {RoomInfo.Soba.BrojSobe}</h3>
         <h3>Kat: {RoomInfo.Soba.Kat}</h3>
         <h3>Broj studenta po sobi: {RoomInfo.Soba.BrojMjesta}</h3>
         <h3>Tip: {RoomInfo.Soba.Tip}</h3>
+        </div>
        </div>
 
     );
