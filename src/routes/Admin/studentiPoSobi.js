@@ -103,23 +103,21 @@ export default function StudentiPoSobama()
       
     let i = 1;
     const list = sobe.map((soba) => (
-        <tr key={soba.Soba.Id.toString()}>
+        <tr key={soba.Soba.Id.toString()} >
             <td>{i++}</td>
             <td>{soba.Soba.Kat}</td>
             <td>{soba.Soba.BrojSobe}</td>
             <td>{soba.Soba.BrojMjesta}</td>
             <td>{soba.Soba.Tip}</td>
-            <td>{soba.Studenti}</td>
+            <td >{soba.Studenti}</td>
+            <td><i className="fa fa-trash" aria-hidden="true"></i></td>
         </tr>
             )) 
 
-            //
-
-        
+            
     return(
         <div className="container mt-5">
-
-      <table className="table table-responsive">
+      <table className="table ">
         <thead>
             <tr>
                 <td>Rbr</td>
@@ -128,13 +126,14 @@ export default function StudentiPoSobama()
                 <td>Broj mjesta</td>
                 <td>Tip</td>
                 <td>Studenti</td>
+                <td>Obriši</td>
             </tr>
         </thead>
         <tbody>
         {list}
         </tbody>
     </table>
-        </div>);
+        </div>); 
     
     
 

@@ -59,10 +59,10 @@ export default function Login()
         {
           navigate('/pocetna');
         }
-        else if(response.data === "Login successfully" && (inputs.login==="student")) //ako je prijava studenta redirekcija na status
+        else if(response.data.login === "Login successfully" && (inputs.login==="student")) //ako je prijava studenta redirekcija na status
         {
          // sessionStorage.setItem()
-          navigate('/status');
+          navigate(`/status/${response.data.Id}`);
         }
         else if(response.data === "Login failed")
         {

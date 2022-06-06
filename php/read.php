@@ -53,9 +53,6 @@ switch ($_POST['json']) {
         array_push($returnData,new StudentSobaList($soba,$string));   
        } 
 
-      
-
-
        echo json_encode($returnData);
         break;
         case 'StudentiBezSobe':
@@ -96,7 +93,43 @@ switch ($_POST['json']) {
 
             echo json_encode($oStudenti);
             break;
- 
+
+            case 'StudentInfoRoom':
+                $query = "Select * from studenti where Id=".$_POST["Id"];
+                $result = $oConnection->query($query);
+
+                $oRow = $result->fetch(PDO::FETCH_BOTH);
+                
+                $id = $oRow['Id'];
+                $i = utf8_encode($oRow['Ime']);
+                $p = utf8_encode($oRow['Prezime']);
+                $s = $oRow['Spol'];
+                //$j = $oRow['JMBAG'];
+                $o = $oRow['OIB']; 
+                $student = new Student($id, $i,$p,$s,$o);
+
+                $query = "Select * from studentposobi where StudentId=".$_POST["Id"];
+                $result = $oConnection->query($query);
+                $oRow = $result->fetch(PDO::FETCH_BOTH);
+
+                $query = "Select * from sobe where Id=".$oRow['SobaId'];
+                $result = $oConnection->query($query);
+
+                $oRow = $result->fetch(PDO::FETCH_BOTH);
+                $id = $oRow['Id'];
+                 $bs =  $oRow['BrojSobe'];
+                 $kat =  $oRow['Kat'];
+                 $bm =  $oRow['BrojMjesta'];
+                 $tip =  $oRow['Tip'];
+
+                $soba = new Soba($id,$bs,$kat,$bm,$tip); 
+
+                $array = new StudentSobaList($soba,$student);
+               // array_push($array,$soba);
+              //  array_push($array,$student);
+
+                echo json_encode($array);
+                break;
 }
 }
 else

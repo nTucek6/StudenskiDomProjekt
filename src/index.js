@@ -8,6 +8,7 @@ import Main from "./routes/Admin/pocetna"
 import Login from "./js/login/login";
 import StudentiPoSobama from "./routes/Admin/studentiPoSobi";
 import StudentBezSobe from './routes/Admin/StudentBezSobe';
+import StudentInfo from './js/student/status';
 
 import MainS from "./routes/Student/pocetnaS";
 
@@ -31,7 +32,7 @@ root.render(
   </Routes>
   <Routes>
   <Route path="/" element={<MainS/>} > 
-  <Route path="/status" />
+  <Route path="/status/:id" element={<StudentInfo/>} />
   </Route>
   </Routes>
   </BrowserRouter>
