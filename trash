@@ -1,0 +1,46 @@
+   /*
+    const columns = [
+        { dataField: 'Soba.Id', text: 'Id', sort: true },
+        { dataField: 'Soba.Kat', text: 'Kat', sort: true },
+        { dataField: 'Soba.BrojSobe', text: 'Soba', sort: true },
+        { dataField: 'Soba.BrojMjesta', text: 'Broj mjesta', sort: true },
+        { dataField: 'Soba.Tip', text: 'Tip', sort: true },
+        { dataField:  'Studenti', text:'Studenti',sort:true }
+      //  {  dataFormat:linkFollow,text:"Delete student"}
+      ];
+
+      const defaultSorted = [{
+        dataField: 'Soba',
+        order: 'asc'
+      }];
+
+      const pagination = paginationFactory({
+        page: 1,
+        sizePerPage: 10,
+        lastPageText: '>>',
+        firstPageText: '<<',
+        nextPageText: '>',
+        prePageText: '<',
+        showTotal: true,
+        alwaysShowAllBtns: true,
+        onPageChange: function (page, sizePerPage) {
+          //console.log('page', page);
+         // console.log('sizePerPage', sizePerPage);
+        },
+        onSizePerPageChange: function (page, sizePerPage) {
+        //  console.log('page', page);
+         // console.log('sizePerPage', sizePerPage);
+        }
+      });
+
+
+
+
+      
+     
+      return (
+        <div className="container app">
+          <BootstrapTable bootstrap4 keyField='Soba.Id' data={sobe} columns={columns} defaultSorted={defaultSorted} pagination={pagination} > 
+          </BootstrapTable>
+        </div>
+      ); */

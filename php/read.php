@@ -95,7 +95,7 @@ switch ($_POST['json']) {
             echo json_encode($oStudenti);
             break;
 
-            case 'StudentInfoRoom':
+            case 'StudentInfoRoom': //Kod prijave studenta vračamo informacije o studentu i njegovoj sobi
                 $query = "Select * from studenti where Id=".$_POST["Id"];
                 $result = $oConnection->query($query);
 
@@ -112,24 +112,75 @@ switch ($_POST['json']) {
 
                 $query = "Select * from studentposobi where StudentId=".$_POST["Id"];
                 $result = $oConnection->query($query);
-                $oRow = $result->fetch(PDO::FETCH_BOTH);
+                $count = $result->rowCount();
 
-                $query = "Select * from sobe where Id=".$oRow['SobaId'];
-                $result = $oConnection->query($query);
-
-                $oRow = $result->fetch(PDO::FETCH_BOTH);
-                $id = $oRow['Id'];
-                 $bs =  $oRow['BrojSobe'];
-                 $kat =  $oRow['Kat'];
-                 $bm =  $oRow['BrojMjesta'];
-                 $tip =  $oRow['Tip'];
-
-                $soba = new Soba($id,$bs,$kat,$bm,$tip); 
-
-                $array = new StudentSobaList($soba,$student);
              
+
+                if($count > 0)
+                {
+                    $oRow = $result->fetch(PDO::FETCH_BOTH);
+                    $query = "Select * from sobe where Id=".$oRow['SobaId'];
+                    $result = $oConnection->query($query);
+                    $oRow = $result->fetch(PDO::FETCH_BOTH);
+                    $id = $oRow['Id'];
+                     $bs =  $oRow['BrojSobe'];
+                     $kat =  $oRow['Kat'];
+                     $bm =  $oRow['BrojMjesta'];
+                     $tip =  $oRow['Tip'];
+                    $soba = new Soba($id,$bs,$kat,$bm,$tip);
+                    $array = new StudentSobaList($soba,$student);
+                    echo json_encode($array);
+                }
+                
+                else
+                {
+               /* 
+                array_push($data,$student);
+                array_push($data,(object)["Soba"=>"null"]);
+                echo json_encode($data); */
+                $soba = (object)["BrojSobe"=>"null"];
+                $array = new StudentSobaList($soba,$student);
                 echo json_encode($array);
+                }
+                
                 break;
+                case 'GetStudentRoom': //Ispis studenata iz sobe za brisanje
+                    $oStudentPoSobi = VratiStudentPoSobi();
+                    $oStudenti = VratiStudente();
+                    $sobaId = $_POST['SobaId'];
+                    $returnData = array();
+
+                    foreach($oStudentPoSobi as $sps)
+                    {
+                        if($sps->SobaId == $sobaId)
+                        {
+                            foreach($oStudenti as $student)
+                            {
+                                if($sps->StudentId == $student->Id )
+                                {
+                                    array_push($returnData,$student);
+                                }
+                            }
+                        }
+                    }
+                    echo json_encode($returnData);
+                    break;
+
+                    case'DeleteStudentFromRoom':
+                        $query = "Delete from studentposobi where StudentId=".$_POST['StudentId'];
+                        $result =$oConnection->query($query);
+                        $count = $result->rowCount();
+
+                        if($count > 0)
+                        {
+                            echo json_encode("Delete successfull");
+                        }
+                        else
+                        {
+                            echo json_encode("Delete failed");
+                        }
+                        
+                        break;
 }
 }
 else

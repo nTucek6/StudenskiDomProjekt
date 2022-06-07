@@ -33,6 +33,19 @@ export default function StudentInfo()
 
     if(!RoomInfo) return null;
 
+    
+    if(RoomInfo.Soba.BrojSobe== "null")
+    {
+      return (
+        <div className="container mt-5">
+        <div className="styling text-center">
+       <h3>Student: {RoomInfo.Studenti.Ime + " " +RoomInfo.Studenti.Prezime}</h3>
+        <h4>Info: Studentu još nije određena soba!</h4>
+       </div>
+      </div>
+      )
+    } 
+
     return(
        <div className="container mt-5">
          <div className="styling text-center">

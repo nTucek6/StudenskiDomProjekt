@@ -1,23 +1,25 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
+import {useNavigate } from 'react-router-dom';
 //import { Outlet, Link } from "react-router-dom";
-import BootstrapTable from 'react-bootstrap-table-next';
+//import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+//import paginationFactory from 'react-bootstrap-table2-paginator';
 import Modal from 'react-modal';
 import React from 'react';
 import trashbin from '../../img/trash-can.png';
 //import { Button } from "bootstrap";
 
 
-
-
 export default function StudentiPoSobama()
 {
     const [sobe, setData] = useState(null);
+    const [BrisanjeOdabir,setDeleteStudent] = useState(null);
+    const navigate = useNavigate();
 
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     //const [studentiPoSobi,setSPS] = useState(null);
     const readUrl = "http://localhost/studenskidom/php/read.php";
@@ -49,56 +51,65 @@ export default function StudentiPoSobama()
         return null;
     }
 
-    /*
-    const columns = [
-        { dataField: 'Soba.Id', text: 'Id', sort: true },
-        { dataField: 'Soba.Kat', text: 'Kat', sort: true },
-        { dataField: 'Soba.BrojSobe', text: 'Soba', sort: true },
-        { dataField: 'Soba.BrojMjesta', text: 'Broj mjesta', sort: true },
-        { dataField: 'Soba.Tip', text: 'Tip', sort: true },
-        { dataField:  'Studenti', text:'Studenti',sort:true }
-      //  {  dataFormat:linkFollow,text:"Delete student"}
-      ];
 
-      const defaultSorted = [{
-        dataField: 'Soba',
-        order: 'asc'
-      }];
+    const customStyles = {
+      content: {
+        top: '15%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+      },
+    };
 
-      const pagination = paginationFactory({
-        page: 1,
-        sizePerPage: 10,
-        lastPageText: '>>',
-        firstPageText: '<<',
-        nextPageText: '>',
-        prePageText: '<',
-        showTotal: true,
-        alwaysShowAllBtns: true,
-        onPageChange: function (page, sizePerPage) {
-          //console.log('page', page);
-         // console.log('sizePerPage', sizePerPage);
+
+   
+    function openModal() {
+      setIsOpen(true);
+    }
+  
+    function closeModal() {
+      setIsOpen(false);
+    }
+
+   function AfterClick(SobaId,studenti)
+   {
+    
+    if(studenti !== "")
+    {
+      axios({
+        method: "post",
+        url: readUrl,
+        data: 
+        {
+            "json":"GetStudentRoom",
+            "SobaId":SobaId
+         
         },
-        onSizePerPageChange: function (page, sizePerPage) {
-        //  console.log('page', page);
-         // console.log('sizePerPage', sizePerPage);
-        }
-      });
-
-
-
-
-      
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          setDeleteStudent(response.data);
+          //console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });   
+  
+            openModal();
+    }
+    else
+    {
+      alert("U sobi ne postoje studenti za brisanje");
+    }
      
-      return (
-        <div className="container app">
-          <BootstrapTable bootstrap4 keyField='Soba.Id' data={sobe} columns={columns} defaultSorted={defaultSorted} pagination={pagination} > 
-          </BootstrapTable>
-        </div>
-      ); */
+   }
+
 
       const Posts =({posts,i}) => 
       {
-      //let i = 1;
         let list = posts.map((soba) => (
             <tr key={soba.Soba.Id.toString()} className="text-center" >
                 <td>{i++}</td>
@@ -107,30 +118,23 @@ export default function StudentiPoSobama()
                 <td>{soba.Soba.BrojMjesta}</td>
                 <td>{soba.Soba.Tip}</td>
                 <td >{soba.Studenti}</td>
-                <td ><img id="BtnHover"  src={trashbin}/ ></td></tr>
+                <td ><img id="BtnHover" alt="" src={trashbin} onClick={()=>AfterClick(soba.Soba.Id,soba.Studenti)} /></td></tr>
                 )); 
           return list;
       }
 
-     
-
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const currentPost = sobe.slice(indexOfFirstPost,indexOfLastPost);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
-
-  const Pagination = ({postPerPage,totalPosts,paginate}) =>
+  const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
   {
     const pageNumbers = [];
-
     for(let i=1; i<=Math.ceil(totalPosts/postPerPage);i++)
     {
       pageNumbers.push(i);
     }
-
     return(
         <tr className="pagination">
       {pageNumbers.map(number =>(
@@ -142,88 +146,94 @@ export default function StudentiPoSobama()
     )
   }
 
-  return(
-  <div className="container mt-5">
-  <div className="table-responsive">
-  <table className="table" >
-  <thead>
-  <tr className="text-center">
-  <th>Rbr</th>
-  <th>Kat</th>
-  <th>Soba</th>
-  <th>Broj mjesta</th>
-  <th>Tip</th>
-  <th>Studenti</th>
-  <th>Obriši studenta</th>
-  </tr>
-  </thead>
-  <tbody>
-  <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
-  <Pagination postPerPage={postPerPage} totalPosts={sobe.length} paginate={paginate} />
-  </tbody>
-  
-  </table>
-  </div>
-  </div>); 
- 
-}
-
-
-function DeleteFromRoomModal()
-{
-////<tfoot><tr><td><button>Prev</button></td><td><button>Next</button></td></tr></tfoot>
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
-
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  function openModal() {
-    setIsOpen(true);
+  function ModalData() //Ispis studenata za brisanje iz sobe
+  {
+    if(!BrisanjeOdabir)
+    {
+      return null;
+    }
+    return(
+      <div>
+         {BrisanjeOdabir.map((student)=>(<button key={student.Id} className="" onClick={()=>DeleteStudent(student.Id)}>{student.Ime + " " + student.Prezime}</button>))}
+       </div>)
+    
+//<li key={student.Id}>{student.Ime + " " + student.Prezime}</li>
   }
 
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
+  function DeleteStudent(StudentId)
+  {
+    if(window.confirm("Jeste li sigurni za odabir?"))
+    {
+      axios({
+        method: "post",
+        url: readUrl,
+        data: 
+        {
+            "json":"DeleteStudentFromRoom",
+            "StudentId":StudentId
+         
+        },
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          console.log(response.data);
+         // navigate("/sobe");
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        }); 
+        closeModal();
+        window.location.reload(false); 
+    }
+    
   }
 
-  function closeModal() {
-    setIsOpen(false);
-  }
 
-  return (
-    <div>
-      <button onClick={openModal}>Open Modal</button>
+    return(
+      <div className="container mt-5">
+      <div className="table-responsive">
+      <table className="table" >
+      <thead>
+      <tr className="text-center">
+      <th>Rbr</th>
+      <th>Kat</th>
+      <th>Soba</th>
+      <th>Broj mjesta</th>
+      <th>Tip</th>
+      <th>Studenti</th>
+      <th>Obriši studenta</th>
+      </tr>
+      </thead>
+      <tbody>
+      <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
+      </tbody>
+      <tfoot>
+      <Pagination postPerPage={postPerPage} totalPosts={sobe.length} paginate={paginate} />
+      </tfoot>
+      
+      </table>
+      </div>
       <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2>
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-        <form>
-          <input />
-          <button>tab navigation</button>
-          <button>stays</button>
-          <button>inside</button>
-          <button>the modal</button>
-        </form>
-      </Modal>
-    </div>
-  );
-
+             isOpen={modalIsOpen}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Delete Student">
+             <h2 >Odaberite studenta kojega želite ukloniti iz sobe</h2>
+              <ModalData />
+             <div className="mt-2">
+             <button onClick={closeModal}>Close</button>
+             </div>
+           </Modal>
+      </div>
+      );
 }
+
+
+
+
 
 
 
