@@ -106,8 +106,8 @@ switch ($_POST['json']) {
                // echo ($oRow['Prezime']);
 
                 $id = $oRow['Id'];
-                $i = utf8_encode($oRow['Ime']);
-                $p = utf8_encode($oRow['Prezime']);
+                $i = $oRow['Ime'];
+                $p = $oRow['Prezime'];
                 $s = $oRow['Spol'];
                 //$j = $oRow['JMBAG'];
                 $o = $oRow['OIB']; 
@@ -326,8 +326,8 @@ function VratiStudente()
       while($oRow = $result->fetch(PDO::FETCH_BOTH))
       {
       $id = $oRow['Id'];
-      $i = utf8_encode($oRow['Ime']);
-      $p = utf8_encode($oRow['Prezime']);
+      $i = $oRow['Ime'];
+      $p = $oRow['Prezime'];
       $s = $oRow['Spol'];
       //$j = $oRow['JMBAG'];
       $o = $oRow['OIB']; 

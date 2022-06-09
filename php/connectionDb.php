@@ -9,7 +9,7 @@ $password = "";
 
 try
 {
-$oConnection = new PDO("mysql:host=$host;dbname=$dbName", $username, $password);
+$oConnection = new PDO("mysql:host=$host;dbname=$dbName", $username, $password,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
 //;charset=utf8
 }
 catch (PDOException $pe)
