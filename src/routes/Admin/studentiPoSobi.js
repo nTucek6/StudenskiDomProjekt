@@ -75,7 +75,6 @@ export default function StudentiPoSobama()
 
    function AfterClick(SobaId,studenti)
    {
-    
     if(studenti !== "")
     {
       axios({

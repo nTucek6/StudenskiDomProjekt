@@ -88,11 +88,14 @@ switch ($_POST['json']) {
               // echo $oStudenti;
             }
             
+
             $oStudenti =array_values($oStudenti);
 
-            //var_dump($oStudenti);
+            if(count($oStudenti) > 0)
+            {
+                echo json_encode($oStudenti);
+            }
 
-            echo json_encode($oStudenti);
             break;
 
             case 'StudentInfoRoom': //Kod prijave studenta vračamo informacije o studentu i njegovoj sobi
@@ -181,6 +184,104 @@ switch ($_POST['json']) {
                         }
                         
                         break;
+                        case'GetFreeRoom':
+                            $punesobe = array(); // polje sluzi za izbacivanje soba koje su popunjene
+                            $sssM = array(); // sobe koje jos imaju slobodno mjesto
+                            //Select sobe.Id,BrojSobe,Count(studentposobi.SobaId) as StudentUSobi from sobe inner join studentposobi on sobe.Id = studentposobi.SobaId GROUP BY studentposobi.SobaId
+                            $oStudentPoSobi = VratiStudentPoSobi();
+                            $oSobe = VratiSobe();
+                            /////////////////////////////////////////////////////////////////////////////
+                            $query = "Select Spol from studenti where Id=".$_POST['StudentId'];
+                            $result = $oConnection->query($query);
+                            $oRow = $result->fetch(PDO::FETCH_BOTH);
+                            $spol = $oRow['Spol'];
+                            //////////////////////////////////////////////////////////////////////////////
+                            $query = "Select sobe.Id,BrojSobe,sobe.BrojMjesta,studenti.Spol from sobe inner join studentposobi on sobe.Id = studentposobi.SobaId inner join studenti on studentposobi.StudentId = studenti.Id GROUP BY sobe.Id having sobe.BrojMjesta > Count(studentposobi.SobaId) ";
+                            $result = $oConnection->query($query);
+                            $count = $result->rowCount($result);
+                            if($count > 0)
+                            {
+                                while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                {
+                                    $data= (object)
+                                    [
+                                        "Soba"=>$oRow['Id'],
+                                        "Spol"=>$oRow['Spol']
+                                    ];
+                                    array_push($sssM,$data);
+                                }
+                            }
+                         
+                            //var_dump($sssM);
+                            /////////////////////////////////////////////////////////////////////////////
+                            $query = "Select sobe.Id,BrojSobe,sobe.BrojMjesta from sobe INNER join studentposobi on sobe.Id = studentposobi.SobaId GROUP BY studentposobi.SobaId having sobe.BrojMjesta = Count(studentposobi.SobaId)";
+                            $result = $oConnection->query($query);
+                            $count = $result->rowCount($result);
+                            if($count > 0)
+                            {
+                                while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                {
+                                    array_push($punesobe,$oRow['Id']);
+                                }
+                            }
+                         
+                            //var_dump($punesobe);
+
+                            $sobeCount = count($oSobe);
+                            for ($i=0; $i < $sobeCount; $i++) 
+                            { 
+                                if(count($punesobe) > 0)
+                                {
+                                    for ($j=0; $j < count($punesobe); $j++) 
+                                    { 
+                                        if($oSobe[$i]->Id == $punesobe[$j])
+                                        {
+                                            unset($oSobe[$i]);
+                                            break;
+                                        }  
+                                    }
+                                }
+                             
+                                if(count($sssM) > 0)
+                                {
+                                    for ($k=0; $k <count($sssM); $k++) 
+                                    { 
+                                        if(isset($oSobe[$i]->Id))
+                                        {
+                                            if($sssM[$k]->Spol != $spol && $sssM[$k]->Soba == $oSobe[$i]->Id)
+                                            {
+                                                unset($oSobe[$i]);
+                                               // break;
+                                            }
+                                        }
+                                    } 
+                                }
+                            }
+
+                            $oSobe =array_values($oSobe);
+                            echo json_encode($oSobe);
+                            break;
+                            case 'InsertStudentRoom':
+                                ///////////////////////////////////////////////////////////////////////
+                                $query = "Select Id from sobe where BrojSobe=".$_POST['BrojSobe'];
+                                $result = $oConnection->query($query);
+                                $oRow = $result->fetch(PDO::FETCH_BOTH);
+                                $sobaId = $oRow['Id'];
+                                ///////////////////////////////////////////////////////////////////////
+                                $studentId = $_POST['StudentId'];
+                                $query = "Insert into studentposobi (SobaId,StudentId) values($sobaId,$studentId)";
+                                $result = $oConnection->query($query);
+
+                                if($result->rowCount() > 0)
+                                {
+                                    echo json_decode("Operation successful");
+                                }
+                                else
+                                {
+                                    echo json_decode("Operation unsuccessful");
+                                }
+                                break;
+
 }
 }
 else

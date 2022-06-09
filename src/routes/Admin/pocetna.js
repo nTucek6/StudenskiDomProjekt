@@ -7,7 +7,7 @@ export default function Main()
   const navigate = useNavigate(); 
   function AreYouSure()
   {
-    if(window.confirm("Are you sure?"))
+    if(window.confirm("Odjava?"))
     {
       navigate('/Prijava/adminLogin');
     }
