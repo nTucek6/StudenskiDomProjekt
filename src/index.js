@@ -28,6 +28,7 @@ root.render(
   <Route path="/pocetna" />
   <Route path="/sobe" element={<StudentiPoSobama/>} />
   <Route path="/studenti" element={<StudentBezSobe/>}/>
+  <Route path="/listacekanja"/>
   </Route>
   </Routes>
   <Routes>

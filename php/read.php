@@ -316,7 +316,6 @@ function VratiSobe()
 
 function VratiStudente()
 {
-    //header('Content-type: application/json; charset=utf-8');
       include "connectionDb.php";
       //$query = "Select sobe.Id,sobe.BrojSobe,sobe.Kat,sobe.BrojMjesta,sobe.Tip,studenti.Id as StudentId,studenti.Ime,studenti.Prezime from sobe left join studentposobi on sobe.Id = studentposobi.SobaId left join studenti on studentposobi.StudentId = studenti.Id ";
       $query = "Select * from studenti";
@@ -341,8 +340,8 @@ function VratiStudente()
 
 function VratiStudentPoSobi()
 {
-    //header('Content-type: application/json; charset=utf-8');
-    include "connectionDb.php";
+    
+      include "connectionDb.php";
       $query = "Select * from studentposobi";
       $result = $oConnection->query($query);
       $oSPS = array();

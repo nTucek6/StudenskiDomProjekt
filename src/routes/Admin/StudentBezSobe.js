@@ -38,7 +38,7 @@ export default function StudentBezSobe()
                     });   
         }
 
-        if(!studenti) {return(<h3 className="text-center mt-3">Trenutno ne postoje studenti be sobe</h3>) }
+        if(!studenti) {return(<h3 className="text-center mt-3">Trenutno ne postoje studenti bez sobe.</h3>) }
       
       
         const customStyles = {
@@ -96,7 +96,7 @@ export default function StudentBezSobe()
                     <td>{student.Ime}</td>
                     <td>{student.Prezime}</td>
                     <td>{student.OIB}</td>
-                    <td><img id="BtnHover" src={addbnt} onClick={()=>AfterClick(student.Id)} /></td>
+                    <td><img id="BtnHover" alt="" src={addbnt} onClick={()=>AfterClick(student.Id)} /></td>
                 </tr>
                     ));
                     return list;

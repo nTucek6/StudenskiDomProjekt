@@ -17,10 +17,11 @@ export default function Main()
         <>
         <div id='main'>
         <nav className='navigacija'>
-        <img id="logo"  src={logo}/ >
+        <img id="logo" alt="" src={logo}/ >
         <Link className='btn' to="/pocetna">Pocetna</Link>
         <Link className='btn' to="/sobe">Sobe</Link>
         <Link className='btn' to="/studenti">Studenti</Link>
+        <Link className='btn' to="/listacekanja">Lista čekanja</Link>
         <div id="OdjavaBtn"><button className="btn btn-danger" onClick={() => AreYouSure()}>Odjava</button></div>
         </nav>
         </div>

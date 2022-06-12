@@ -1,6 +1,8 @@
 import React,{ useState } from "react"
 import { useParams,useNavigate  } from "react-router-dom";
 import axios from "axios";
+import eye from '../../img/eye.png';
+import invisible from '../../img/invisible.png';
 
 export default function Login()
 {
@@ -22,12 +24,13 @@ export default function Login()
   ////////////////////////////////////////////////////////////////////
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     const readUrl = "http://localhost/studenskidom/php/login.php";
     let inputData;
 
     if(inputs.login === "student" || inputs.login === "admin")
     {
+      event.preventDefault();
      inputData = 
      {
       "Email":inputs.Email,
@@ -38,6 +41,7 @@ export default function Login()
     }
     else if (inputs.login==="register")
     {
+      console.log(inputs.Spol);
       inputData = 
       {
 
@@ -91,7 +95,7 @@ if(type === "studentLogin")
 {
   inputs.login = "student";
     return(
-        <div className="container">
+        <div className="container mt-5">
   <h1 className="text-center">Prijava Studenta</h1>
   <form className="" onSubmit={handleSubmit}>
       <div className="form-group d-flex justify-content-center">
@@ -118,14 +122,16 @@ if(type === "studentLogin")
       <button type="submit" className="btn">Prijava</button>
     </div>
   </form>
-</div>)
+</div>
+
+)
 }
 
 if(type === "adminLogin")
 {
   inputs.login = "admin";
     return(
-      <div className="container">
+      <div className="container mt-5">
       <h1 className="text-center">Prijava Admina</h1>
       <form className="" onSubmit={handleSubmit}>
           <div className="form-group d-flex justify-content-center">
@@ -158,47 +164,81 @@ if(type === "studentRegister")
 {
   inputs.login = "register";
 
+//form-group d-flex justify-content-center
+
   return ( 
-    <div className="container">
-    <h1 className="text-center">Registracija studenta</h1>
-    <form className="" onSubmit={handleSubmit}>
-        <div className="form-group d-flex justify-content-center">
-      <label><p>Unesite email adresu:</p>
+    <div className="container mt-5 d-flex justify-content-center">
+    <form className="row row-cols-1" onSubmit={handleSubmit}>
+    <div className="col"><h1 className="text-center">Registracija studenta</h1></div>
+        <div className="col ">
+      <label className="centerRegister"><p>Unesite email adresu:</p>
         <input type="email" 
         name="KorisnickoIme"
         value={inputs.KorisnickoIme || ""} 
         onChange={handleChange}/>
       </label>
       </div>
-   
-      <div className="form-group d-flex justify-content-center">
-      <label>
-        <p>Password:</p>
+      <div className="col ">
+      <label className="centerRegister">
+        <p>Unesite lozinku:</p>
         <input type={passwordType}
         name="Lozinka" 
         value={inputs.Lozinka || ""} 
         onChange={handleChange} />
+          <div className="input-group-btn d-inline">
+          <button className="btn btn-outline-primary" onClick={togglePassword}>
+          {passwordType==="password"? <img alt="eye" src={eye} /> :<img alt="eye/" src={invisible} /> }
+          </button>
+          </div>
+        </label>     
+       </div>
 
-<div className="input-group-btn d-inline">
-                     <button className="btn btn-outline-primary" onClick={togglePassword}>
-                     { passwordType==="password"? <i className="bi bi-eye-slash"></i> :<i className="bi bi-eye"></i> }
-                     </button>
-                    </div>
+       <div className="col ">
+      <label className="centerRegister"><p>Ime:</p>
+        <input type="text" 
+        name="Ime"
+        value={inputs.Ime || ""} 
+        onChange={handleChange}/>
+      </label>
+      </div>
 
-        </label> 
-                
-      
+      <div className="col ">
+      <label className="centerRegister"><p>Prezime:</p>
+        <input type="text" 
+        name="Prezime"
+        value={inputs.Prezime || ""} 
+        onChange={handleChange}/>
+      </label>
+      </div>
 
-    
-
-
+      <div className="col ">
+      <label className="centerRegister"><p>Spol:</p>
+      <label>Muško</label><input type="radio" 
+        name="Spol"
+        value={"M"} 
+        checked={inputs.Spol === "M"}
+        onChange={handleChange}/> <br></br>
+         <label>Žensko</label> <input type="radio" 
+        name="Spol"
+        value={"F"}
+        checked={inputs.Spol === "F"} 
+        onChange={handleChange}/> <br></br>
+        </label>
       </div>
 
 
-      
+      <div className="col mt-3">
+      <label className="centerRegister"><p>Unesite svoj OIB:</p>
+        <input type="text" 
+        name="oib"
+        value={inputs.oib || ""} 
+        onChange={handleChange}/>
+      </label>
+      </div>
+   
 
-      <div className="d-flex justify-content-center mt-1">
-        <button type="submit" className="btn" >Register</button>
+      <div className="col text-center mt-2">
+        <button type="submit" className="btn btn-success" >Register</button>
       </div>
     </form>
   </div>);
