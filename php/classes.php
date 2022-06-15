@@ -63,6 +63,19 @@ class StudentSobaList
 
 }
 
+class StudentUpis
+{
+    public function __construct($i,$ime,$prez,$sp,$o,$b)
+    {
+$this->Id = $i;       
+$this->Ime = $ime;        
+$this->Prezime = $prez;
+$this->Spol = $sp;
+$this->OIB = $o;        
+$this->BrojBodova = $b;        
+    }
+}
+
 
 
 ?>

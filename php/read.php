@@ -4,9 +4,6 @@ include "classes.php";
 header('Access-Control-Allow-Headers: *');
 header('Access-Control-Allow-Origin: *');
 header('Content-type: text/json; charset=utf-8');
-//header('Content-Type: text/html; charset=utf-8');
-
-
 
 if(isset($_POST['json']))
 {
@@ -53,7 +50,6 @@ switch ($_POST['json']) {
         $string;
         array_push($returnData,new StudentSobaList($soba,$string));   
        } 
-
        echo json_encode($returnData);
         break;
         case 'StudentiBezSobe':
@@ -88,23 +84,18 @@ switch ($_POST['json']) {
               // echo $oStudenti;
             }
             
-
             $oStudenti =array_values($oStudenti);
-
             if(count($oStudenti) > 0)
             {
                 echo json_encode($oStudenti);
             }
-
             break;
-
             case 'StudentInfoRoom': //Kod prijave studenta vračamo informacije o studentu i njegovoj sobi
                 $query = "Select * from studenti where Id=".$_POST["Id"];
                 $result = $oConnection->query($query);
 
                 $oRow = $result->fetch(PDO::FETCH_BOTH);
                // echo ($oRow['Prezime']);
-
                 $id = $oRow['Id'];
                 $i = $oRow['Ime'];
                 $p = $oRow['Prezime'];
@@ -112,12 +103,9 @@ switch ($_POST['json']) {
                 //$j = $oRow['JMBAG'];
                 $o = $oRow['OIB']; 
                 $student = new Student($id, $i,$p,$s,$o);
-
                 $query = "Select * from studentposobi where StudentId=".$_POST["Id"];
                 $result = $oConnection->query($query);
                 $count = $result->rowCount();
-
-             
 
                 if($count > 0)
                 {
@@ -134,7 +122,6 @@ switch ($_POST['json']) {
                     $array = new StudentSobaList($soba,$student);
                     echo json_encode($array);
                 }
-                
                 else
                 {
                /* 

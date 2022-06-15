@@ -9,6 +9,7 @@ import Login from "./js/login/login";
 import StudentiPoSobama from "./routes/Admin/studentiPoSobi";
 import StudentBezSobe from './routes/Admin/StudentBezSobe';
 import StudentInfo from './js/student/status';
+import ListaCekanja from './routes/Admin/listacekanja';
 
 import MainS from "./routes/Student/pocetnaS";
 
@@ -28,7 +29,7 @@ root.render(
   <Route path="/pocetna" />
   <Route path="/sobe" element={<StudentiPoSobama/>} />
   <Route path="/studenti" element={<StudentBezSobe/>}/>
-  <Route path="/listacekanja"/>
+  <Route path="/listacekanja" element={<ListaCekanja/>}/>
   </Route>
   </Routes>
   <Routes>
