@@ -54,7 +54,53 @@ if(isset($_POST['login']))
                 break;
             case 'register':
 
-                
+                $query = "Select OIB from studenti where OIB =".$_POST['Oib'];
+                $result = $oConnection->query($query);
+                echo $result->rowCount();
+
+                if($result->rowCount()>0)
+                {
+                    $query = "Select * from studenti where OIB =".$_POST['Oib'];
+                    $result = $oConnectionFaks->query($query);
+                    if($result->rowCount()>0)
+                    {
+                        
+                        $oRowS = $result->fetch(PDO::FETCH_BOTH); // podaci studenta koji se registrir
+                        $query = "Select * from dodatnipodacistudent where StudentId=".$oRowS['Id'];
+                        $result = $oConnectionFaks->query($query);
+                        $oRowD = $result->fetch(PDO::FETCH_BOTH); // dodatni podaci studenta
+                        $query = "Select * from studentbodovi where StudentId=".$oRowS['Id'];
+                        $result = $oConnectionFaks->query($query);
+                        $oRowB = $result->fetch(PDO::FETCH_BOTH); //bodovi studenta
+    
+                        $query = "Insert into studenti(Ime,Prezime,Spol,JMBAG,OIB,Upisan) values('".$oRowS['Ime']."','".$oRowS['Prezime']."','".$oRowS['Spol']."','".$oRowS['JMBAG']."','".$oRowS['OIB']."',0)";
+                        $result = $oConnection->query($query);
+                        $query = "Select * from studenti ORDER BY Id DESC LIMIT 1";
+                        $result = $oConnection->query($query);
+                        $oRow = $result->fetch(PDO::FETCH_BOTH);
+                        $StudentId = $oRow['Id'];
+    
+                        $query = "Insert into dodatnipodacistudent (StudentId,Adresa,PBR,Grad) values($StudentId,'".$oRowD['Adresa']."',".$oRowD['PBR'].",'".$oRowD['Grad']."')";
+                        $result = $oConnection->query($query);
+    
+                        $query = "Insert into studentbodovi (StudentId,BrojBodova) value($StudentId,".$oRowB['BrojBodova'].")";
+                        $result = $oConnection->query($query); 
+    
+                        $query = "Insert into login (Email,Lozinka,StudentId) values('".$_POST['Email']."','".$_POST['Lozinka']."',$StudentId)";
+                        $result = $oConnection->query($query); 
+     
+                        echo "Registration successfull";
+                    }
+                    else
+                    {
+                        echo "Registration failed"; 
+                    }  
+                }
+                else
+                {
+                    echo "Student je vec registriran";   
+                }
+               
                 break;
         }
     }

@@ -10,8 +10,8 @@ if(isset($_POST['json']))
 switch ($_POST['json'])
 {
     case 'listacekanja':
-        $query = "Select studenti.Id,studenti.Ime,studenti.Prezime,studenti.Spol,studenti.OIB,studentbodovi.BrojBodova from studenti LEFT JOIN studentbodovi on studentbodovi.StudentId = studenti.Id ORDER BY studentbodovi.StudentId DESC;";
-        $result = $oConnectionFaks->query($query);
+        $query = "Select listacekanjastudent.Id,listacekanjastudent.Ime,listacekanjastudent.Prezime,listacekanjastudent.Spol,listacekanjastudent.OIB,studentbodovi.BrojBodova from listacekanjastudent LEFT JOIN studentbodovi on studentbodovi.StudentId = listacekanjastudent.Id ORDER BY studentbodovi.StudentId DESC;";
+        $result = $oConnection->query($query);
         if($result->rowCount() > 0)
         {
             $studenti = array();
@@ -30,7 +30,6 @@ switch ($_POST['json'])
             echo json_encode($studenti);
         }
         break;
-
 }
 }
 else

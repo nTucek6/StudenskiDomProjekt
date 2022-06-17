@@ -17,7 +17,9 @@ export default function ListaCekanja()
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);
 
-    const readUrlFaks = "http://localhost/studenskidom/php/faks.php";
+    const navigate = useNavigate();
+
+    const readUrl = "http://localhost/studenskidom/php/read.php";
 
     useEffect(()=>{UcitajPodatke();},[]);
     
@@ -25,7 +27,7 @@ export default function ListaCekanja()
         {
                 axios({
                     method: "post",
-                    url: readUrlFaks,
+                    url: readUrl,
                     data: 
                     {
                         "json":"listacekanja"
@@ -34,13 +36,15 @@ export default function ListaCekanja()
                   })
                     .then(function (response) {
                         setData(response.data);
-                       // console.log(response);
+                        console.log(response);
                     })
                     .catch(function (response) {
                       //handle error
                       console.log(response);
                     });   
         }
+
+        
 
         if(!studenti) {return(<h3 className="text-center mt-3">Lista za čekanje je prazna.</h3>)}
 
@@ -81,6 +85,30 @@ export default function ListaCekanja()
           )
         }
 
+       async function UpisUDom()
+        {
+         await axios({method: "post",url: readUrl,data: {"json":"UpisUDom"},headers: { "Content-Type": "multipart/form-data" },})
+            .then(function (response) 
+            {
+              if(response.data === "Operation successful")
+              {
+                window.location.reload();
+              }
+              else
+              {
+                alert("Error");
+              }
+             // console.log(response.data);
+            })
+            .catch(function (response) 
+            {
+              console.log(response);
+            });
+            
+           // navigate("/studenti");
+          
+        }
+
         return(
            <>
             <table className="container table mt-5">
@@ -101,7 +129,7 @@ export default function ListaCekanja()
                 </tfoot>
            
             </table>
-            <div className="text-center"><button className="btn btn-primary ">Upiši u studenski dom</button></div>
+            <div className="text-center"><button className="btn btn-primary" onClick={()=>UpisUDom()}>Upiši u studenski dom</button></div>
              
              </>
             );

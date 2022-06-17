@@ -41,12 +41,14 @@ export default function Login()
     }
     else if (inputs.login==="register")
     {
-      console.log(inputs.Spol);
+      event.preventDefault();
       inputData = 
       {
-
-      };
-
+       "Email":inputs.Email,
+       "Lozinka": inputs.Lozinka,
+       "Oib": inputs.oib,
+       "login": inputs.login
+      }
     }
 
     axios({
@@ -54,7 +56,7 @@ export default function Login()
       url: readUrl,
       data: inputData 
       ,
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { "Content-Type": "multipart/form-data"},
     })
       .then(function (response) {
         //handle success
@@ -72,9 +74,17 @@ export default function Login()
         {
           alert("Pogreška pri prijavi");
         }
-        else if(response.data === "Register successfully" && inputs.login === "register")
+        else if(response.data === "Registration successfull" && inputs.login === "register")
         {
-          navigate('/Prijava/studentLogin')
+          navigate('/Prijava/studentLogin');
+        }
+        else if(response.data === "Registration failed" && inputs.login === "register")
+        {
+          alert("Pogreška pri registraciji!");
+        }
+        else if(response.data === "Student je vec registriran" && inputs.login === "register")
+        {
+          alert("Student je već registriran!");
         }
 
        //
@@ -173,9 +183,9 @@ if(type === "studentRegister")
         <div className="col ">
       <label className="centerRegister"><p>Unesite email adresu:</p>
         <input type="email" 
-        name="KorisnickoIme"
-        value={inputs.KorisnickoIme || ""} 
-        onChange={handleChange}/>
+        name="Email"
+        value={inputs.Email || ""} 
+        onChange={handleChange} required/>
       </label>
       </div>
       <div className="col ">
@@ -184,21 +194,42 @@ if(type === "studentRegister")
         <input type={passwordType}
         name="Lozinka" 
         value={inputs.Lozinka || ""} 
-        onChange={handleChange} />
+        onChange={handleChange} required/>
           <div className="input-group-btn d-inline">
-          <button className="btn btn-outline-primary" onClick={togglePassword}>
-          {passwordType==="password"? <img alt="eye" src={eye} /> :<img alt="eye/" src={invisible} /> }
+          <button type="button" className="btn btn-outline-primary" onClick={togglePassword}>
+          {passwordType==="password"? <img alt="eye" src={eye} /> :<img alt="eye/" src={invisible} />}
           </button>
           </div>
         </label>     
        </div>
 
-       <div className="col ">
+      <div className="col mt-3">
+      <label className="centerRegister"><p>Unesite svoj OIB:</p>
+        <input type="text" 
+        name="oib"
+        value={inputs.oib || ""} 
+        onChange={handleChange} required/>
+      </label>
+      </div>
+   
+      <div className="col text-center mt-2">
+        <button type="submit" className="btn btn-success" >Register</button>
+      </div>
+    </form>
+  </div>);
+}
+}
+
+
+/*
+
+
+      <div className="col ">
       <label className="centerRegister"><p>Ime:</p>
         <input type="text" 
         name="Ime"
         value={inputs.Ime || ""} 
-        onChange={handleChange}/>
+        onChange={handleChange} required/>
       </label>
       </div>
 
@@ -207,7 +238,7 @@ if(type === "studentRegister")
         <input type="text" 
         name="Prezime"
         value={inputs.Prezime || ""} 
-        onChange={handleChange}/>
+        onChange={handleChange}required/>
       </label>
       </div>
 
@@ -225,30 +256,6 @@ if(type === "studentRegister")
         onChange={handleChange}/> <br></br>
         </label>
       </div>
-
-
-      <div className="col mt-3">
-      <label className="centerRegister"><p>Unesite svoj OIB:</p>
-        <input type="text" 
-        name="oib"
-        value={inputs.oib || ""} 
-        onChange={handleChange}/>
-      </label>
-      </div>
-   
-
-      <div className="col text-center mt-2">
-        <button type="submit" className="btn btn-success" >Register</button>
-      </div>
-    </form>
-  </div>);
-}
-}
-
-
-
-/*
-
  
 
 

@@ -14,13 +14,16 @@ $this->OIB = $o;
 
 class Student extends Osoba
 {
-
-   /* public function __construct($id,$ime,$prezime)
+    public function __construct($i,$ime,$prez,$sp,$o,$u)
     {
-        $this->Id = $id;
-        $this->Ime = $ime;
-        $this->Prezime = $prezime;
-    } */
+$this->Id = $i;       
+$this->Ime = $ime;        
+$this->Prezime = $prez;
+$this->Spol = $sp;
+$this->OIB = $o; 
+$this->Upisan = $u;           
+    }
+
 
 }
 

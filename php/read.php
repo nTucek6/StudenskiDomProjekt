@@ -74,7 +74,12 @@ switch ($_POST['json']) {
                         $emtpy = true;
                         //echo $emtpy;
                     }
-                } 
+                }
+                if($oStudenti[$i]->Upisan == 0)
+                {
+                    $emtpy = true;
+                }
+                
                 if($emtpy == true)
                 {
                     //array_splice($oStudenti, $i, 1);
@@ -102,7 +107,8 @@ switch ($_POST['json']) {
                 $s = $oRow['Spol'];
                 //$j = $oRow['JMBAG'];
                 $o = $oRow['OIB']; 
-                $student = new Student($id, $i,$p,$s,$o);
+                $u = $oRow['Upisan'];
+                $student = new Student($id, $i,$p,$s,$o,$u);
                 $query = "Select * from studentposobi where StudentId=".$_POST["Id"];
                 $result = $oConnection->query($query);
                 $count = $result->rowCount();
@@ -238,7 +244,6 @@ switch ($_POST['json']) {
                                             if($sssM[$k]->Spol != $spol && $sssM[$k]->Soba == $oSobe[$i]->Id)
                                             {
                                                 unset($oSobe[$i]);
-                                               // break;
                                             }
                                         }
                                     } 
@@ -268,6 +273,83 @@ switch ($_POST['json']) {
                                     echo json_decode("Operation unsuccessful");
                                 }
                                 break;
+
+                                case 'listacekanja':
+                                    $query = "Select studenti.Id,studenti.Ime,studenti.Prezime,studenti.Spol,studenti.OIB,studenti.Upisan,studentbodovi.BrojBodova from studenti LEFT JOIN studentbodovi on studentbodovi.StudentId = studenti.Id where Upisan = 0 ORDER BY studentbodovi.StudentId DESC;";
+                                    //echo $query;
+                                    $result = $oConnection->query($query);
+                                    $studenti = array();
+                                        while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                        {
+                                            $Id = $oRow['Id'];
+                                            $Ime = $oRow['Ime'];
+                                            $Prezime = $oRow['Prezime'];
+                                            $Spol = $oRow['Spol'];
+                                            $OIB = $oRow['OIB'];
+                                            $BrojBodova = $oRow['BrojBodova'];
+                            
+                                            $student = new StudentUpis($Id,$Ime,$Prezime,$Spol,$OIB,$BrojBodova);
+                                            array_push($studenti,$student);
+                                        }
+                                        if(count($studenti)> 0)
+                                        {
+                                            echo json_encode($studenti);
+                                        }
+                                      
+                                    break;
+                                case 'UpisUDom':
+                                    $query = "Select count(*) as BrojZauzetihMjesta from studentposobi";
+                                    $result = $oConnection->query($query);
+                                  
+                                        $oRow = $result->fetch(PDO::FETCH_BOTH);
+                                        $ZauzetaMjesta = $oRow['BrojZauzetihMjesta']; // broj koliko je mjesta već zauzeto
+                                        $query = "select Sum(BrojMjesta) as BrojMjesta from sobe";
+                                        $result = $oConnection->query($query);
+                                        $oRow = $result->fetch(PDO::FETCH_BOTH);
+                                        $UkupnoMjesta = $oRow['BrojMjesta']; //cijeli kapacitet doma
+                                        
+                                        $SlobodnaMjesta = $UkupnoMjesta - $ZauzetaMjesta;
+                                       // echo $SlobodnaMjesta;
+
+                                        if($SlobodnaMjesta > 0)
+                                        {
+
+                                            $query = "Select studenti.Id,studenti.Ime,studenti.Prezime,studenti.Spol,studenti.JMBAG,studenti.OIB,studenti.Upisan from studenti LEFT JOIN studentbodovi on studentbodovi.StudentId = studenti.Id where Upisan = 0 ORDER BY studentbodovi.StudentId DESC;";
+                                            $result = $oConnection->query($query);
+    
+                                            $oStudenti = array();
+                                            while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                            {
+                                            $id = $oRow['Id'];
+                                            $i = $oRow['Ime'];
+                                            $p = $oRow['Prezime'];
+                                            $s = $oRow['Spol'];
+                                            $o = $oRow['OIB']; 
+                                            $u = $oRow['Upisan']; 
+                                            $student = new Student($id, $i,$p,$s,$o,$u);
+                                            array_push($oStudenti,$student);
+                                            }
+    
+                                           // echo count($oStudenti);
+    
+                                            if(count($oStudenti) > 0)
+                                            {
+                                                if($SlobodnaMjesta > count($oStudenti))
+                                                {
+                                                    $SlobodnaMjesta = count($oStudenti);
+                                                }
+                                                for ($i=0; $i < $SlobodnaMjesta; $i++) 
+                                                { 
+                                                $query = "Update studenti Set Upisan = 1 where Id=".$oStudenti[$i]->Id;
+                                                $result = $oConnection->query($query);
+                                                }
+                                                echo json_encode("Operation successful");
+                                            }
+
+                                        }
+
+                                    
+                                    break;
 
 }
 }
@@ -317,7 +399,8 @@ function VratiStudente()
       $s = $oRow['Spol'];
       //$j = $oRow['JMBAG'];
       $o = $oRow['OIB']; 
-      $student = new Student($id, $i,$p,$s,$o);
+      $u = $oRow['Upisan']; 
+      $student = new Student($id, $i,$p,$s,$o,$u);
       array_push($oStudenti,$student);
       }
       //echo json_encode($oStudenti);
