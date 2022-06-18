@@ -1,11 +1,7 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
 import {useNavigate } from 'react-router-dom';
-//import { Outlet, Link } from "react-router-dom";
-//import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-//import paginationFactory from 'react-bootstrap-table2-paginator';
-import Modal from 'react-modal';
 import React from 'react';
 
 
@@ -17,7 +13,7 @@ export default function ListaCekanja()
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);
 
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
 
     const readUrl = "http://localhost/studenskidom/php/read.php";
 
@@ -87,7 +83,9 @@ export default function ListaCekanja()
 
        async function UpisUDom()
         {
-         await axios({method: "post",url: readUrl,data: {"json":"UpisUDom"},headers: { "Content-Type": "multipart/form-data" },})
+          if(window.confirm("Potvrdite radnju"))
+          {
+            await axios({method: "post",url: readUrl,data: {"json":"UpisUDom"},headers: { "Content-Type": "multipart/form-data" },})
             .then(function (response) 
             {
               if(response.data === "Operation successful")
@@ -106,6 +104,8 @@ export default function ListaCekanja()
             });
             
            // navigate("/studenti");
+          }
+      
           
         }
 

@@ -4,8 +4,9 @@ import './index.css';
 import App from './App';
 import { BrowserRouter, Routes, Route,Navigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Main from "./routes/Admin/pocetna"
+import Main from "./routes/Admin/navigacija"
 import Login from "./js/login/login";
+import PocetnaAdmin from './routes/Admin/pocetna';
 import StudentiPoSobama from "./routes/Admin/studentiPoSobi";
 import StudentBezSobe from './routes/Admin/StudentBezSobe';
 import StudentInfo from './js/student/status';
@@ -26,7 +27,7 @@ root.render(
   </Routes>
   <Routes>
   <Route path="/" element={<Main/>} > 
-  <Route path="/pocetna" />
+  <Route path="/pocetna" element={<PocetnaAdmin/>}/>
   <Route path="/sobe" element={<StudentiPoSobama/>} />
   <Route path="/studenti" element={<StudentBezSobe/>}/>
   <Route path="/listacekanja" element={<ListaCekanja/>}/>

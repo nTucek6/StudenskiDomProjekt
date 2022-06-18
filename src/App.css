@@ -103,4 +103,16 @@ position: relative;
 left: 42%;
 }
 
+#pocetnaAdmin
+{
+  /*height: 70vh; */
+ 
+}
+
+.pocetnaAdmin-area:hover
+{
+  cursor: pointer;
+}
+
+
 
