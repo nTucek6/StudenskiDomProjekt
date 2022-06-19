@@ -33,14 +33,29 @@ export default function StudentInfo()
 
     if(!RoomInfo) return null;
 
-    
+    function UpisanUDom(Upisan)
+    {
+     
+      if(Upisan === "0")
+      {
+        return(<h4>Student još nije upisan u studenski dom.</h4>)
+      }
+      else if(Upisan === "1")
+      {
+        return(<h4>Info: Studentu još nije određena soba!</h4>)
+      }
+
+    }
+
+//
+
     if(RoomInfo.Soba.BrojSobe== "null")
     {
       return (
         <div className="container mt-5">
         <div className="styling text-center">
        <h3>Student: {RoomInfo.Studenti.Ime + " " +RoomInfo.Studenti.Prezime}</h3>
-        <h4>Info: Studentu još nije određena soba!</h4>
+        {UpisanUDom(RoomInfo.Studenti.Upisan)}
        </div>
       </div>
       )

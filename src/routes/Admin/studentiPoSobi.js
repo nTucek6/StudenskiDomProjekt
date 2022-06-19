@@ -15,7 +15,7 @@ export default function StudentiPoSobama()
 {
     const [sobe, setData] = useState(null);
     const [BrisanjeOdabir,setDeleteStudent] = useState(null);
-    const navigate = useNavigate();
+   // const navigate = useNavigate();
 
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);

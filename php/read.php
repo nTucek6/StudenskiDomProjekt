@@ -329,9 +329,7 @@ switch ($_POST['json']) {
                                             $student = new Student($id, $i,$p,$s,$o,$u);
                                             array_push($oStudenti,$student);
                                             }
-    
                                            // echo count($oStudenti);
-    
                                             if(count($oStudenti) > 0)
                                             {
                                                 if($SlobodnaMjesta > count($oStudenti))
@@ -345,10 +343,53 @@ switch ($_POST['json']) {
                                                 }
                                                 echo json_encode("Operation successful");
                                             }
-
                                         }
+                                    break;
+                                    case 'GetRoomInfo':
+                                        $query = "Select * from sobe where BrojSobe=".$_POST['BrojSobe'];
+                                        $result = $oConnection->query($query);
+                                        $oStudentPoSobi = VratiStudentPoSobi();
+                                        $oStudenti = VratiStudente();
 
-                                    
+                                        $oRow = $result->fetch(PDO::FETCH_BOTH);
+                                            $id = $oRow['Id'];
+                                            $bs =  $oRow['BrojSobe'];
+                                            $kat =  $oRow['Kat'];
+                                            $bm =  $oRow['BrojMjesta'];
+                                            $tip =  $oRow['Tip'];
+                                        $soba = new Soba($id,$bs,$kat,$bm,$tip); 
+                                  
+                                        $studenti = array();
+                                     
+                                        foreach($oStudentPoSobi as $sps) 
+                                        {
+                                            if($id == $sps->SobaId) //trazimo sobu
+                                            {
+                                                foreach($oStudenti as $student) //trazimo studenta koji je upisan u sobu i stavljamo ga u polje studenata
+                                                {
+                                                    if($sps->StudentId==$student->Id)
+                                                    {
+                                                       array_push($studenti,$student);
+                                                    }
+                                                } 
+                                            }
+                                        }
+                                        $c = 0;
+                                        $string = "";
+                                        foreach($studenti as $s)
+                                        {
+                                            if($c == count($studenti)-1)
+                                            {
+                                                $string .= $s->Ime." ".$s->Prezime;
+                                            }
+                                            else
+                                            {
+                                                $string .= $s->Ime." ".$s->Prezime.", ";
+                                            }
+                                            $c++;
+                                        }
+                                        $SobaStudentInfo = new StudentSobaList($soba,$string);
+                                        echo json_encode($SobaStudentInfo);
                                     break;
 
 }
@@ -381,7 +422,6 @@ function VratiSobe()
         
         return $oSobe;
 }
-
 
 function VratiStudente()
 {
@@ -426,47 +466,5 @@ function VratiStudentPoSobi()
       }
       return $oSPS;  
 }
-
-/*
-function VratiJednogStudenta()
-{
-    include "connectionDb.php";
-    $query = "Select * from studenti where Id="$_POST['StudentId'];
-    $result = $oConnection->query($query);
-    $oStudenti = array();
-    
-    while($oRow = $result->fetch(PDO::FETCH_BOTH))
-    {
-    $id = $oRow['Id'];
-    $i = utf8_encode($oRow['Ime']);
-    $p = utf8_encode($oRow['Prezime']);
-    $s = $oRow['Spol'];
-    //$j = $oRow['JMBAG'];
-    $o = $oRow['OIB']; 
-    $student = new Student($id, $i,$p,$s,$o);
-    array_push($oStudenti,$student);
-    }
-    //echo json_encode($oStudenti);
-    return $oStudenti;  
-} */
-
-/*
-$query = "Select * From studenti";
-$result = $oConnection->query($query);
-$oStudenti = array();
-while($oRow = $result->fetch(PDO::FETCH_BOTH))
-{
-
-$id = $oRow['Id'];
-$i = $oRow['Ime'];
-$p = $oRow['Prezime'];
-$s = $oRow['Spol'];
-$j = $oRow['JMBAG'];
-$o = $oRow['OIB'];
-$student = new Student($id, $i,$p,$s,$o); 
-array_push($oStudenti,$student);
-}
-//var_dump($oArtikli);
-echo json_encode($oStudenti);*/
 
 ?>
