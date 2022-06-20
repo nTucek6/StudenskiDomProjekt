@@ -8,12 +8,15 @@ export default function PocetnaAdmin()
 {
   const[blueprint,setBlueprint] = useState("prizemlje");
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalKomentar, setModalKomentar] = useState(false);
+  const [modalUnosKomentar, setModalUnosKomentar] = useState(false);
+ // const [inputs,setInputs] = useState({});
+
   const [RoomInfo,setRoomInfo] = useState();
+  const [KomentarRoom,setKomentarRoom] = useState();
   const readUrl = "http://localhost/studenskidom/php/read.php";
  function Prizemlje()
  {
-
-    // href="http://360.vuv.hr/studom360/vanjski-prostor/index.html"
     return(
         <>
         <img src={prizemlje} id="pocetnaAdmin" useMap="#prizemlje" className="border border-primary" alt=""/>
@@ -39,7 +42,7 @@ export default function PocetnaAdmin()
         <area target="" alt="115" title="115" className="areahover" coords="618,207,800,294" shape="rect"  onClick={()=>GetRoomInfo(115)}/>
         <area target="" alt="116" title="116" className="areahover" coords="868,205,1051,291" shape="rect" onClick={()=>GetRoomInfo(116)} />
         <area target="" alt="117" title="117" className="areahover" coords="618,110,799,195" shape="rect"  onClick={()=>GetRoomInfo(117)} />
-        <area target="" alt="118" title="118" className="areahover" coords="1052,109,869,197" shape="rect" onClick={()=>GetRoomInfo(118)}  />
+        <area target="" alt="118" title="118" className="areahover" coords="1052,109,869,197" shape="rect" onClick={()=>GetRoomInfo(118)} />
         <area target="" alt="119" title="119" className="areahover" coords="618,17,799,104" shape="rect"   onClick={()=>GetRoomInfo(119)} />
         <area target="" alt="120" title="120" className="areahover" coords="870,11,1052,100" shape="rect"  onClick={()=>GetRoomInfo(120)}/>
         </map>
@@ -142,10 +145,30 @@ function Katovi() //Prikaz slike ovisno o katu
   function openModal() {
     setIsOpen(true);
   }
-
   function closeModal() {
     setIsOpen(false);
   }
+
+  function openKomentarModal()
+  {
+    setModalKomentar(true);
+  }
+
+  function closeKomentarModal()
+  {
+    setModalKomentar(false);
+  }
+
+
+  function openUnosKomentarModal() {
+    setModalUnosKomentar(true);
+  }
+  function closeUnosKomentarModal() {
+    setModalUnosKomentar(false);
+  }
+
+
+
 
 function GetRoomInfo(BrojSobe)
 {
@@ -162,7 +185,7 @@ function GetRoomInfo(BrojSobe)
       })
         .then(function (response) {
             setRoomInfo(response.data);
-            console.log(response.data);
+         //   console.log(response.data);
         })
         .catch(function (response) {
           //handle error
@@ -173,6 +196,60 @@ function GetRoomInfo(BrojSobe)
 openModal();
 }
 
+function GetRoomKomentar(SobaId)
+{
+    axios({
+        method: "post",
+        url: readUrl,
+        data: 
+        {
+            "json":"GetRoomKomentar",
+            "SobaId":SobaId
+         
+        },
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+            setKomentarRoom(response.data);
+           // console.log(response.data);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });   
+    
+//
+openKomentarModal();
+}
+
+const handleSubmit = (event) => {
+    event.preventDefault();
+    axios({
+      method: "post",
+      url: readUrl,
+      data: {
+        "json":"AddRoomKomentar",
+        "SobaId":RoomInfo.Soba.Id,
+        "Vlasnik":"Voditelj",
+        "VlasnikId":1,
+        "Komentar":event.target.Komentar.value
+      } 
+      ,
+      headers: { "Content-Type": "multipart/form-data"},
+    })
+      .then(function (response) {
+        if(response.data === "Operation successful")
+        {
+            //console.log(response);
+            closeUnosKomentarModal();
+            closeKomentarModal();
+        }
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });  
+    }
 
 function VratiKat(Kat)
 {
@@ -209,7 +286,6 @@ function IspisStudenta(Studenti)
     {
         return(<h3>Studenti: {Studenti}</h3>)
     }
-
 }
 
 function PopupRoom(tip)
@@ -227,7 +303,6 @@ function PopupRoom(tip)
     {
         window.open('http://360.vuv.hr/studom360/1krevetna-s-kupaonicom/index.html','popup','width=700,height=700,scrollbars=no,resizable=no') ;
     }
-
 }
 
 
@@ -245,21 +320,50 @@ function ModalData()
         <h3>Tip: {VrstaSobe(RoomInfo.Soba.Tip)}</h3>
         {IspisStudenta(RoomInfo.Studenti)}
         </div>
-        <button className="mt-3" onClick={()=>PopupRoom(RoomInfo.Soba.Tip)}>3D prikaz sobe</button>
+        <button className="btn mt-3" onClick={()=>PopupRoom(RoomInfo.Soba.Tip)}>3D prikaz sobe</button>
+        <button className="btn mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
         </>
     )
-
-    
-
 }
 
+function ModalKomentarData()
+{
+    if(!KomentarRoom)
+    {
+        return (<><h3>Soba ne sadrži ni jedan komentar</h3>  <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button></>);
+    }
+
+    const list = KomentarRoom.map((k)=>
+    (
+     <li key={k.Id}>{k.Vlasnik}: {k.Komentar}</li>
+    ));
 
 
 
+    return(
+        <>
+        <h3>Komentari</h3>
+        <ul>
+        {list}
+        </ul>
+        <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
+        </>
+    );
+}
 
+function ModalUnosKomentar()
+{
+    //console.log(inputs.Komentar);
+    return(<form onSubmit={handleSubmit}>
+        <textarea className=""
+        name="Komentar"
+        //value={inputs.Komentar || ""}
+      //  onChange={handleChange}
+        ></textarea>
+        <button type="submit">Submit</button>
+         </form>)
+}
 
-//<button className="btn" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
-//<button className="btn" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
      return(
         <>
         <div className="text-center mt-3 ">
@@ -268,7 +372,6 @@ function ModalData()
         <div className="mt-3 mb-5 text-center areaMap">
         <Katovi />
        </div>
-
        <Modal
              isOpen={modalIsOpen}
              //onAfterOpen={afterOpenModal}
@@ -277,11 +380,38 @@ function ModalData()
              ariaHideApp={false}
              contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Informacije o sobi</h2>
-             <ModalData />
+             <ModalData/>
              <div className="mt-2">
              <button className="btn btn-danger mt-3" onClick={closeModal}>Close</button>
              </div>
            </Modal>
+           <Modal
+             isOpen={modalKomentar}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeKomentarModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Soba info">
+             <h2 className="text-center RoomInfoStyle">Komentari</h2>
+            <ModalKomentarData />
+             <div className="mt-2">
+             <button className="btn btn-danger mt-3" onClick={closeKomentarModal}>Close</button>
+             </div>
+           </Modal>
+           <Modal
+             isOpen={modalUnosKomentar}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeUnosKomentarModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Soba info">
+             <h2 className="text-center RoomInfoStyle">Unesite novi komentar</h2>
+            <ModalUnosKomentar />
+             <div className="mt-2">
+             <button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
+             </div>
+           </Modal>
+
         </>
     )
 }

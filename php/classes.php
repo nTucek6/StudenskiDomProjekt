@@ -79,6 +79,18 @@ $this->BrojBodova = $b;
     }
 }
 
+class Komentar
+{
+    public function __construct($i,$si,$k,$v,$vi)
+    {
+        $this->Id = $i;
+        $this->SobaId = $si;
+        $this->Komentar = $k;
+        $this->Vlasnik = $v;
+        $this->VlasnikId = $vi;
+    }
+}
+
 
 
 ?>

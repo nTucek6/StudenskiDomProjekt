@@ -391,6 +391,53 @@ switch ($_POST['json']) {
                                         $SobaStudentInfo = new StudentSobaList($soba,$string);
                                         echo json_encode($SobaStudentInfo);
                                     break;
+                                    case 'GetRoomKomentar':
+                                        $query = "Select * from sobakomentar where SobaId=".$_POST['SobaId'];
+                                        $result = $oConnection->query($query);
+                                        $oKomentari = array();
+                                        while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                        {
+                                            $id = $oRow['Id'];
+                                            $SobaId = $oRow['SobaId'];
+                                            $Komentar = $oRow['Komentar'];
+                                            $VlasnikId = $oRow['VlasnikId'];
+                                            $Vlasnik = "";
+                                            if($oRow['Vlasnik'] == "Voditelj")
+                                            {
+                                                $Vlasnik = $oRow['Vlasnik'];
+                                            }
+                                            else if($oRow['Vlasnik'] == "Student")
+                                            {
+                                                $query = "Select * from studenti where Id=".$oRow['VlasnikId'];
+                                                $res = $oConnection->query($query);
+                                                $oRowS = $res->fetch(PDO::FETCH_BOTH);
+                                                $Vlasnik = $oRowS['Ime']." ".$oRowS['Prezime']; 
+                                            }
+
+                                            
+                                            $komentar = new Komentar($id,$SobaId,$Komentar,$Vlasnik,$VlasnikId);
+                                            array_push($oKomentari,$komentar);
+                                        }
+
+                                        if(count($oKomentari) > 0)
+                                        {
+                                            echo json_encode($oKomentari);
+                                        }
+
+                                        break;
+
+                                    case 'AddRoomKomentar':
+                                        $query = "Insert into sobakomentar (SobaId,Komentar,Vlasnik,VlasnikId) values(".$_POST['SobaId'].",'".$_POST['Komentar']."','".$_POST['Vlasnik']."',".$_POST['VlasnikId'].")";
+                                        $result = $oConnection->query($query);
+                                        if($result)
+                                        {
+                                            echo json_encode("Operation successful");
+                                        }
+                                        else
+                                        {
+                                            echo json_encode("Operation unsuccessful");
+                                        }
+                                        break;
 
 }
 }
@@ -447,10 +494,8 @@ function VratiStudente()
       return $oStudenti;  
 }
 
-
 function VratiStudentPoSobi()
 {
-    
       include "connectionDb.php";
       $query = "Select * from studentposobi";
       $result = $oConnection->query($query);
