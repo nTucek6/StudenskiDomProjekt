@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2022 at 06:48 PM
+-- Generation Time: Jun 21, 2022 at 11:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -64,7 +64,8 @@ INSERT INTO `dodatnipodacistudent` (`Id`, `StudentId`, `Adresa`, `PBR`, `Grad`) 
 (3, 3, 'A. Starčevića 4', 32100, 'Vinkovci'),
 (4, 4, ' Radnička 26', 40305, 'Nedelišće'),
 (5, 9, 'Zagrađe 48', 34310, 'Požega'),
-(6, 10, 'Ulica Josipa Jelačića 11', 43500, 'Daruvar');
+(6, 10, 'Ulica Josipa Jelačića 11', 43500, 'Daruvar'),
+(9, 13, ' Zajčeva 2', 21000, 'Split');
 
 -- --------------------------------------------------------
 
@@ -92,7 +93,31 @@ INSERT INTO `login` (`Id`, `Email`, `Lozinka`, `StudentId`) VALUES
 (6, 'oto.zadro@vuv.hr', 'feder', 6),
 (7, 'marko.lipusic@vuv.hr', '987', 7),
 (15, 'toni.crnkovic@vuv.hr', '55544332', 9),
-(16, 'dominik.mencik@vuv.hr', '0987', 10);
+(16, 'dominik.mencik@vuv.hr', '0987', 10),
+(19, 'lana.bogdanovic@vuv.hr', 'lana123', 13);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sobakomentar`
+--
+
+CREATE TABLE `sobakomentar` (
+  `Id` int(11) NOT NULL,
+  `SobaId` int(11) NOT NULL,
+  `Komentar` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
+  `Vlasnik` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `VlasnikId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `sobakomentar`
+--
+
+INSERT INTO `sobakomentar` (`Id`, `SobaId`, `Komentar`, `Vlasnik`, `VlasnikId`) VALUES
+(14, 3, 'Najčišća soba u domu.', 'Voditelj', 1),
+(15, 4, 'Noge mu smrde!!!', 'Voditelj', 1),
+(16, 4, 'Nije istina!', 'Student', 1);
 
 -- --------------------------------------------------------
 
@@ -113,7 +138,7 @@ CREATE TABLE `sobe` (
 --
 
 INSERT INTO `sobe` (`Id`, `BrojSobe`, `Kat`, `BrojMjesta`, `Tip`) VALUES
-(1, 100, 0, 2, 'C'),
+(1, 100, 0, 2, 'B'),
 (2, 101, 0, 1, 'A'),
 (3, 102, 0, 2, 'B'),
 (4, 103, 0, 1, 'A'),
@@ -123,16 +148,48 @@ INSERT INTO `sobe` (`Id`, `BrojSobe`, `Kat`, `BrojMjesta`, `Tip`) VALUES
 (8, 107, 0, 2, 'C'),
 (9, 108, 0, 2, 'C'),
 (10, 109, 0, 2, 'C'),
-(11, 110, 1, 2, 'C'),
-(12, 111, 1, 2, 'C'),
-(13, 112, 1, 2, 'C'),
-(14, 113, 1, 2, 'C'),
-(15, 114, 1, 2, 'C'),
-(16, 115, 1, 2, 'C'),
-(17, 116, 1, 2, 'C'),
-(18, 117, 1, 2, 'C'),
-(19, 118, 1, 2, 'C'),
-(20, 119, 1, 2, 'C');
+(11, 110, 0, 2, 'C'),
+(12, 111, 0, 2, 'C'),
+(13, 112, 0, 2, 'C'),
+(14, 113, 0, 2, 'C'),
+(15, 114, 0, 2, 'C'),
+(16, 115, 0, 2, 'C'),
+(17, 116, 0, 2, 'C'),
+(18, 117, 0, 2, 'C'),
+(19, 118, 0, 2, 'C'),
+(20, 119, 0, 2, 'C'),
+(21, 120, 0, 2, 'C'),
+(22, 200, 1, 2, 'C'),
+(23, 201, 1, 2, 'C'),
+(24, 202, 1, 2, 'C'),
+(25, 203, 1, 2, 'C'),
+(26, 204, 1, 2, 'C'),
+(27, 205, 1, 2, 'C'),
+(28, 206, 1, 2, 'C'),
+(29, 207, 1, 2, 'C'),
+(30, 208, 1, 2, 'C'),
+(31, 209, 1, 2, 'C'),
+(32, 210, 1, 2, 'C');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stanarinastudenti`
+--
+
+CREATE TABLE `stanarinastudenti` (
+  `Id` int(11) NOT NULL,
+  `StudentId` int(11) NOT NULL,
+  `Iznos` decimal(10,2) NOT NULL,
+  `DatumUplate` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `stanarinastudenti`
+--
+
+INSERT INTO `stanarinastudenti` (`Id`, `StudentId`, `Iznos`, `DatumUplate`) VALUES
+(1, 1, '400.00', '2021-10-06');
 
 -- --------------------------------------------------------
 
@@ -152,7 +209,8 @@ CREATE TABLE `studentbodovi` (
 
 INSERT INTO `studentbodovi` (`Id`, `StudentId`, `BrojBodova`) VALUES
 (13, 9, 1548),
-(14, 10, 1900);
+(14, 10, 1900),
+(17, 13, 1200);
 
 -- --------------------------------------------------------
 
@@ -182,8 +240,9 @@ INSERT INTO `studenti` (`Id`, `Ime`, `Prezime`, `Spol`, `JMBAG`, `OIB`, `Upisan`
 (5, 'Leonardo', 'Širac', 'M', '0307017653', '33395652209', 1),
 (6, 'Oto', 'Zadro', 'M', '0307017245', '52089767872', 1),
 (7, 'Marko', 'Lipušić', 'M', '0307017781', '07380194833', 1),
-(9, 'Toni', 'Crnković', 'M', '0307017584', '11604164810', 0),
-(10, 'Dominik', 'Menčik', 'M', '0307017082', '02504215829', 0);
+(9, 'Toni', 'Crnković', 'M', '0307017584', '11604164810', 1),
+(10, 'Dominik', 'Menčik', 'M', '0307017082', '02504215829', 1),
+(13, 'Lana', 'Bogdanović', 'F', '0307017138', '03090171073', 0);
 
 -- --------------------------------------------------------
 
@@ -203,10 +262,10 @@ CREATE TABLE `studentposobi` (
 
 INSERT INTO `studentposobi` (`Id`, `SobaId`, `StudentId`) VALUES
 (19, 4, 1),
-(2, 1, 2),
+(28, 12, 7),
 (3, 3, 3),
 (5, 5, 5),
-(18, 1, 7),
+(27, 12, 2),
 (15, 3, 4),
 (21, 5, 6);
 
@@ -233,9 +292,21 @@ ALTER TABLE `login`
   ADD PRIMARY KEY (`Id`);
 
 --
+-- Indexes for table `sobakomentar`
+--
+ALTER TABLE `sobakomentar`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- Indexes for table `sobe`
 --
 ALTER TABLE `sobe`
+  ADD PRIMARY KEY (`Id`);
+
+--
+-- Indexes for table `stanarinastudenti`
+--
+ALTER TABLE `stanarinastudenti`
   ADD PRIMARY KEY (`Id`);
 
 --
@@ -270,37 +341,49 @@ ALTER TABLE `administrator`
 -- AUTO_INCREMENT for table `dodatnipodacistudent`
 --
 ALTER TABLE `dodatnipodacistudent`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `sobakomentar`
+--
+ALTER TABLE `sobakomentar`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `sobe`
 --
 ALTER TABLE `sobe`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `stanarinastudenti`
+--
+ALTER TABLE `stanarinastudenti`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `studentbodovi`
 --
 ALTER TABLE `studentbodovi`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `studenti`
 --
 ALTER TABLE `studenti`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `studentposobi`
 --
 ALTER TABLE `studentposobi`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2022 at 06:47 PM
+-- Generation Time: Jun 21, 2022 at 11:58 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -41,7 +41,11 @@ CREATE TABLE `dodatnipodacistudent` (
 
 INSERT INTO `dodatnipodacistudent` (`Id`, `StudentId`, `Adresa`, `PBR`, `Grad`) VALUES
 (1, 1, 'Zagrađe 48', 34310, 'Požega'),
-(2, 2, 'Ulica Josipa Jelačića 11', 43500, 'Daruvar');
+(2, 2, 'Ulica Josipa Jelačića 11', 43500, 'Daruvar'),
+(3, 3, ' Zajčeva 2', 21000, 'Split'),
+(4, 4, 'Trg V. Lisinskog 3', 31000, 'Osijek'),
+(5, 5, 'Vinkovačka 3', 31000, 'Osijek'),
+(6, 6, 'Trg pobjede 3', 35000, 'Slavonski Brod');
 
 -- --------------------------------------------------------
 
@@ -61,7 +65,11 @@ CREATE TABLE `studentbodovi` (
 
 INSERT INTO `studentbodovi` (`Id`, `StudentId`, `BrojBodova`) VALUES
 (1, 1, 1548),
-(2, 2, 1900);
+(2, 2, 1900),
+(3, 3, 1200),
+(4, 4, 1350),
+(5, 5, 1850),
+(6, 6, 900);
 
 -- --------------------------------------------------------
 
@@ -84,21 +92,11 @@ CREATE TABLE `studenti` (
 
 INSERT INTO `studenti` (`Id`, `Ime`, `Prezime`, `Spol`, `JMBAG`, `OIB`) VALUES
 (1, 'Toni', 'Crnković', 'M', '0307017584', '11604164810'),
-(2, 'Dominik', 'Menčik', 'M', '0307017082', '02504215829');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `studentipodacistudij`
---
-
-CREATE TABLE `studentipodacistudij` (
-  `Id` int(11) NOT NULL,
-  `StudentId` int(11) NOT NULL,
-  `GodinaStudija` int(1) NOT NULL,
-  `OstvareniECTS` int(4) NOT NULL,
-  `ProsjekOcjena` decimal(10,2) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+(2, 'Dominik', 'Menčik', 'M', '0307017082', '02504215829'),
+(3, 'Lana', 'Bogdanović', 'F', '0307017138', '03090171073'),
+(4, 'Manuela', 'Pavić', 'F', '0307017605', '08858903235'),
+(5, 'Patrik', 'Grgić', 'M', '0307017478', '07845704958'),
+(6, 'Katja', 'Bogdanić', 'F', '0307017369', '10466940639');
 
 --
 -- Indexes for dumped tables
@@ -123,12 +121,6 @@ ALTER TABLE `studenti`
   ADD PRIMARY KEY (`Id`);
 
 --
--- Indexes for table `studentipodacistudij`
---
-ALTER TABLE `studentipodacistudij`
-  ADD PRIMARY KEY (`Id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -136,25 +128,19 @@ ALTER TABLE `studentipodacistudij`
 -- AUTO_INCREMENT for table `dodatnipodacistudent`
 --
 ALTER TABLE `dodatnipodacistudent`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studentbodovi`
 --
 ALTER TABLE `studentbodovi`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studenti`
 --
 ALTER TABLE `studenti`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `studentipodacistudij`
---
-ALTER TABLE `studentipodacistudij`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
