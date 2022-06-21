@@ -112,7 +112,7 @@ function Katovi() //Prikaz slike ovisno o katu
         return(
             <>
             <button className="btn btn-success" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
-            <button className="btn btn-info" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
+            <button className="btn btn-danger" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
             </>
         )
     }
@@ -120,7 +120,7 @@ function Katovi() //Prikaz slike ovisno o katu
     {
         return(
             <>
-            <button className="btn btn-info" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
+            <button className="btn btn-danger" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
             <button className="btn btn-success" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
             </>
         )
@@ -255,7 +255,7 @@ function VratiKat(Kat)
 {
     if(Kat === "0")
     {
-        return (<span>prizemlje</span>)
+        return ("prizemlje")
     }
     else if(Kat === "1")
     {
@@ -326,7 +326,7 @@ function ModalData()
     )
 }
 
-function ModalKomentarData()
+function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
 {
     if(!KomentarRoom)
     {
@@ -411,7 +411,6 @@ function ModalUnosKomentar()
              <button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
              </div>
            </Modal>
-
         </>
     )
 }

@@ -32,7 +32,7 @@ export default function ListaCekanja()
                   })
                     .then(function (response) {
                         setData(response.data);
-                        console.log(response);
+                        //console.log(response);
                     })
                     .catch(function (response) {
                       //handle error

@@ -56,9 +56,9 @@ if(isset($_POST['login']))
 
                 $query = "Select OIB from studenti where OIB =".$_POST['Oib'];
                 $result = $oConnection->query($query);
-                echo $result->rowCount();
+                //echo $result->rowCount();
 
-                if($result->rowCount()>0)
+                if($result->rowCount()==0)
                 {
                     $query = "Select * from studenti where OIB =".$_POST['Oib'];
                     $result = $oConnectionFaks->query($query);
@@ -88,7 +88,7 @@ if(isset($_POST['login']))
     
                         $query = "Insert into login (Email,Lozinka,StudentId) values('".$_POST['Email']."','".$_POST['Lozinka']."',$StudentId)";
                         $result = $oConnection->query($query); 
-     
+    
                         echo "Registration successfull";
                     }
                     else
