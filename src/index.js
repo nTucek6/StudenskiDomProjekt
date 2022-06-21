@@ -36,6 +36,7 @@ root.render(
   <Routes>
   <Route path="/" element={<MainS/>} > 
   <Route path="/status/:id" element={<StudentInfo/>} />
+  <Route path="/racuni/:id" />
   </Route>
   </Routes>
   </BrowserRouter>

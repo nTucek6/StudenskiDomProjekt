@@ -166,7 +166,6 @@ function ModalKomentarData()
 
     return(
         <>
-        <h3>Komentari</h3>
         <ul>
         {list}
         </ul>
@@ -231,7 +230,6 @@ const handleSubmit = (event) => {
         <h3>Broj studenta po sobi: {RoomInfo.Soba.BrojMjesta}</h3>
         <h3>Tip: {VrstaSobe(RoomInfo.Soba.Tip)}</h3>
         <button className="btn btn-primary mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
-        <button className="btn btn-primary mt-3">Računi</button>
         </div>
        </div>
   <Modal

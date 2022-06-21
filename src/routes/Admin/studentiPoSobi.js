@@ -18,7 +18,7 @@ export default function StudentiPoSobama()
    // const navigate = useNavigate();
 
     const [currentPage,setCurrentPage] = useState(1);
-    const [postPerPage] = useState(10);
+    const [postPerPage] = useState(15);
     const [modalIsOpen, setIsOpen] = useState(false);
 
     //const [studentiPoSobi,setSPS] = useState(null);
@@ -205,12 +205,11 @@ export default function StudentiPoSobama()
       </tr>
       </thead>
       <tbody>
-      <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
+      <Posts  posts={currentPost} i={(postPerPage*currentPage)-14}/>
       </tbody>
       <tfoot>
       <Pagination postPerPage={postPerPage} totalPosts={sobe.length} paginate={paginate} />
       </tfoot>
-      
       </table>
       </div>
       <Modal

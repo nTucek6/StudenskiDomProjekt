@@ -342,7 +342,6 @@ function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
 
     return(
         <>
-        <h3>Komentari</h3>
         <ul>
         {list}
         </ul>
