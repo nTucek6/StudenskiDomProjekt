@@ -439,6 +439,43 @@ switch ($_POST['json']) {
                                         }
                                         break;
 
+                                    case 'GetStudentForBill':
+                                        $query = "Select * from studentposobi where SobaId=".$_POST['SobaId'];
+                                        $result = $oConnection->query($query);
+                                        $studenti = array();
+                                        if($result->rowCount()>0)
+                                        {
+                                            while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                            {   
+                                                $query = "Select * from studenti where Id=".$oRow['StudentId'];
+                                                $rs = $oConnection->query($query);
+                                                $oRows = $rs->fetch(PDO::FETCH_BOTH);
+                                                $student = new Student($oRows['Id'],$oRows['Ime'],$oRows['Prezime'],$oRows['Spol'],$oRows['JMBAG'],$oRows['OIB'],$oRows['Upisan']);
+                                                array_push($studenti,$student);
+                                            }
+                                            if(count($studenti)>0)
+                                            {
+                                                echo json_encode($studenti);
+                                            }
+
+                                        }
+                                        break;
+                                        case 'GetStudentRacun':
+                                            $query = "Select * from stanarinastudenti where StudentId=".$_POST['StudentId']." Order By DatumUplate ASC";
+                                            $result = $oConnection->query($query);
+                                            $oRacuni = array();
+                                            if($result->rowCount()>0)
+                                            {
+                                                while($oRow = $result->fetch(PDO::FETCH_BOTH))
+                                                {
+                                                    $racun = new Racun($oRow['Id'],$oRow['StudentId'],$oRow['Iznos'],$oRow['DatumUplate']);
+                                                    array_push($oRacuni,$racun);
+
+                                                }
+                                                echo json_encode($oRacuni);
+                                            }
+                                            break;
+
 }
 }
 else

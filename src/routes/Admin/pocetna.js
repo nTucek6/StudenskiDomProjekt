@@ -3,6 +3,7 @@ import prvikat from "../../img/1kat.png"
 import {useState,useEffect} from 'react';
 import Modal from 'react-modal';
 import axios from "axios";
+import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 export default function PocetnaAdmin()
 {
@@ -10,10 +11,15 @@ export default function PocetnaAdmin()
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalKomentar, setModalKomentar] = useState(false);
   const [modalUnosKomentar, setModalUnosKomentar] = useState(false);
+  const [modalOdabirStudent, setModalOdabirStudent] = useState(false);
+  const [modalRacunStudent, setmodalRacunStudent] = useState(false);
  // const [inputs,setInputs] = useState({});
-
+  
+  
   const [RoomInfo,setRoomInfo] = useState();
   const [KomentarRoom,setKomentarRoom] = useState();
+  const [studentOdabir,setStudentOdabir] = useState();
+  const [studentRacun, setStudentRacun] = useState();
   const readUrl = "http://localhost/studenskidom/php/read.php";
  function Prizemlje()
  {
@@ -148,26 +154,33 @@ function Katovi() //Prikaz slike ovisno o katu
   function closeModal() {
     setIsOpen(false);
   }
-
   function openKomentarModal()
   {
     setModalKomentar(true);
   }
-
   function closeKomentarModal()
   {
     setModalKomentar(false);
   }
-
-
   function openUnosKomentarModal() {
     setModalUnosKomentar(true);
   }
   function closeUnosKomentarModal() {
     setModalUnosKomentar(false);
   }
+  function openOdabirStudentModal() {
+    setModalOdabirStudent(true);
+  }
+  function closeOdabirStudentModal() {
+    setModalOdabirStudent(false);
+  }
 
-
+  function openRacunStudentModal() {
+    setmodalRacunStudent(true);
+  }
+  function closeRacunStudentModal() {
+    setmodalRacunStudent(false);
+  }
 
 
 function GetRoomInfo(BrojSobe)
@@ -205,7 +218,6 @@ function GetRoomKomentar(SobaId)
         {
             "json":"GetRoomKomentar",
             "SobaId":SobaId
-         
         },
         headers: { "Content-Type": "multipart/form-data" },
       })
@@ -306,6 +318,59 @@ function PopupRoom(tip)
 }
 
 
+function GetStudentRacuni(SobaId)
+{
+  axios({
+    method: "post",
+    url: readUrl,
+    data: 
+    {
+        "json":"GetStudentForBill",
+        "SobaId":SobaId
+     
+    },
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(function (response) {
+        setStudentOdabir(response.data);
+       // console.log(response.data);
+    })
+    .catch(function (response) {
+      //handle error
+      console.log(response);
+    });   
+
+    openOdabirStudentModal();
+}
+
+function GetStudentRacun(StudentId)
+{
+  axios({
+    method: "post",
+    url: readUrl,
+    data: 
+    {
+        "json":"GetStudentRacun",
+        "StudentId":StudentId
+     
+    },
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(function (response) {
+        setStudentRacun(response.data);
+       // console.log(response.data);
+    })
+    .catch(function (response) {
+      //handle error
+      console.log(response);
+    });   
+
+    openRacunStudentModal();
+
+}
+
+
+
 function ModalData()
 {
     if(!RoomInfo)
@@ -322,9 +387,24 @@ function ModalData()
         </div>
         <button className="btn mt-3" onClick={()=>PopupRoom(RoomInfo.Soba.Tip)}>3D prikaz sobe</button>
         <button className="btn mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
+        {RacunButton(RoomInfo.Studenti,RoomInfo.Soba.Id)}
         </>
     )
 }
+
+function RacunButton(Studenti,Id)
+{
+  if(Studenti === "")
+  {
+     return (<button className="btn mt-3" disabled>Računi studenta</button>);
+  }
+  else
+  {
+    return (<button className="btn mt-3" onClick={()=>GetStudentRacuni(Id)}>Računi studenta</button>)
+  }
+
+}
+
 
 function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
 {
@@ -363,6 +443,40 @@ function ModalUnosKomentar()
          </form>)
 }
 
+function ModalOdabirStudenta()
+{
+    if(!studentOdabir) return(null)
+
+    const list = studentOdabir.map((s)=>
+    (
+      <button key={s.Id} className="btn" onClick={()=>GetStudentRacun(s.Id)}>{s.Ime} {s.Prezime}</button>
+    ));
+
+    return (<div className="text-center">{list}</div>);
+    
+}
+
+function ModalRacunStudent()
+{
+  if(!studentRacun) return(<h3>Student nema račun!</h3>)
+
+  const racuni = studentRacun.map((racun)=>(
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn</h4>
+
+  ));
+  return  (<div>{racuni}</div>);
+}
+
+function CloseAllModal()
+{
+  closeModal();
+  closeKomentarModal();
+  closeOdabirStudentModal();
+  closeRacunStudentModal();
+  closeUnosKomentarModal();
+}
+
+
      return(
         <>
         <div className="text-center mt-3 ">
@@ -395,6 +509,7 @@ function ModalUnosKomentar()
             <ModalKomentarData />
              <div className="mt-2">
              <button className="btn btn-danger mt-3" onClick={closeKomentarModal}>Close</button>
+             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
              </div>
            </Modal>
            <Modal
@@ -408,8 +523,41 @@ function ModalUnosKomentar()
             <ModalUnosKomentar />
              <div className="mt-2">
              <button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
+             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
              </div>
            </Modal>
+
+           <Modal
+             isOpen={modalOdabirStudent}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeOdabirStudentModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Soba info">
+             <h2 className="text-center RoomInfoStyle">Odaberite studenta:</h2>
+             <ModalOdabirStudenta />
+             <div className="mt-2">
+             <button className="btn btn-danger mt-3" onClick={closeOdabirStudentModal}>Close</button>
+             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             </div>
+           </Modal>
+
+           <Modal
+             isOpen={modalRacunStudent}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeRacunStudentModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Soba info">
+             <h2 className="text-center RoomInfoStyle">Računi:</h2>
+             <ModalRacunStudent />
+             <div className="mt-2">
+             <button className="btn btn-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
+             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             </div>
+           </Modal>
+
+
         </>
     )
 }

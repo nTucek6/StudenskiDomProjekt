@@ -91,6 +91,19 @@ class Komentar
     }
 }
 
+class Racun
+{
+    public function __construct($i,$si,$iz,$du)
+    {
+        $this->Id = $i;
+        $this->StudentId = $si;
+        $this->Iznos = $iz;
+        $this->DatumUplate = $du;
+    }
+
+
+}
+
 
 
 ?>

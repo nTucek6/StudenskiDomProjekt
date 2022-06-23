@@ -9,9 +9,9 @@ export default function StudentInfo()
     const { id } = useParams();
     const [modalKomentar, setModalKomentar] = useState(false);
     const [modalUnosKomentar, setModalUnosKomentar] = useState(false);
-
     const [KomentarRoom,setKomentarRoom] = useState();
-
+    const [modalRacunStudent, setmodalRacunStudent] = useState(false);
+    const [studentRacun, setStudentRacun] = useState();
     const readUrl = "http://localhost/studenskidom/php/read.php";
 
     useEffect(() => {UcitajPodatke();}, []);
@@ -120,6 +120,33 @@ openKomentarModal();
 }
 
 
+function GetStudentRacun(StudentId)
+{
+  axios({
+    method: "post",
+    url: readUrl,
+    data: 
+    {
+        "json":"GetStudentRacun",
+        "StudentId":StudentId
+     
+    },
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then(function (response) {
+        setStudentRacun(response.data);
+       // console.log(response.data);
+    })
+    .catch(function (response) {
+      //handle error
+      console.log(response);
+    });   
+
+    openRacunStudentModal();
+
+}
+
+
 const customStyles = {
   content: {
     top: '50%',
@@ -147,6 +174,13 @@ function openUnosKomentarModal() {
 }
 function closeUnosKomentarModal() {
   setModalUnosKomentar(false);
+}
+
+function openRacunStudentModal() {
+  setmodalRacunStudent(true);
+}
+function closeRacunStudentModal() {
+  setmodalRacunStudent(false);
 }
 
 
@@ -187,6 +221,18 @@ function ModalUnosKomentar()
         <button type="submit">Submit</button>
          </form>)
 }
+
+function ModalRacunStudent()
+{
+  if(!studentRacun) return(<h3>Student nema račun!</h3>)
+
+  const racuni = studentRacun.map((racun)=>(
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn</h4>
+
+  ));
+  return  (<div>{racuni}</div>);
+}
+
 
 
 const handleSubmit = (event) => {
@@ -230,6 +276,7 @@ const handleSubmit = (event) => {
         <h3>Broj studenta po sobi: {RoomInfo.Soba.BrojMjesta}</h3>
         <h3>Tip: {VrstaSobe(RoomInfo.Soba.Tip)}</h3>
         <button className="btn btn-primary mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
+        <button className="btn btn-primary mt-3" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
         </div>
        </div>
   <Modal
@@ -259,6 +306,19 @@ contentLabel="Soba info">
 <button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
 </div>
 </Modal>
+<Modal
+             isOpen={modalRacunStudent}
+             //onAfterOpen={afterOpenModal}
+             onRequestClose={closeRacunStudentModal}
+             style={customStyles}
+             ariaHideApp={false}
+             contentLabel="Soba info">
+             <h2 className="text-center RoomInfoStyle">Računi:</h2>
+             <ModalRacunStudent />
+             <div className="mt-2">
+             <button className="btn btn-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
+             </div>
+           </Modal>
 
 </>
 
