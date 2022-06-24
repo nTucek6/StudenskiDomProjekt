@@ -152,8 +152,8 @@ export default function StudentiPoSobama()
       return null;
     }
     return(
-      <div>
-         {BrisanjeOdabir.map((student)=>(<button key={student.Id} className="" onClick={()=>DeleteStudent(student.Id)}>{student.Ime + " " + student.Prezime}</button>))}
+      <div className="mt-3 text-center ">
+         {BrisanjeOdabir.map((student)=>(<button key={student.Id} className="btn btn-warning marginButtons" onClick={()=>DeleteStudent(student.Id)}>{student.Ime + " " + student.Prezime}</button>))}
        </div>)
     
 //<li key={student.Id}>{student.Ime + " " + student.Prezime}</li>
@@ -221,8 +221,8 @@ export default function StudentiPoSobama()
              contentLabel="Delete Student">
              <h2 >Odaberite studenta kojega želite ukloniti iz sobe</h2>
               <ModalData />
-             <div className="mt-2">
-             <button onClick={closeModal}>Close</button>
+             <div className="mt-4 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger p-2" onClick={closeModal}>Close</button>
              </div>
            </Modal>
       </div>

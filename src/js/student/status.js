@@ -193,18 +193,18 @@ function ModalKomentarData()
 
     const list = KomentarRoom.map((k)=>
     (
-     <li key={k.Id}>{k.Vlasnik}: {k.Komentar}</li>
+     <li key={k.Id}><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li>
     ));
 
 
 
     return(
-        <>
+        <div>
         <ul>
         {list}
         </ul>
         <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
-        </>
+        </div>
     );
 }
 
@@ -213,12 +213,12 @@ function ModalUnosKomentar()
 {
     //console.log(inputs.Komentar);
     return(<form onSubmit={handleSubmit}>
-        <textarea className=""
+        <textarea className="d-flex p-2 textareaClass"
         name="Komentar"
         //value={inputs.Komentar || ""}
       //  onChange={handleChange}
         ></textarea>
-        <button type="submit">Submit</button>
+        <button type="submit" className="btn btn-success mt-2">Submit</button>
          </form>)
 }
 
@@ -227,7 +227,7 @@ function ModalRacunStudent()
   if(!studentRacun) return(<h3>Student nema račun!</h3>)
 
   const racuni = studentRacun.map((racun)=>(
-    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn</h4>
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno == 0 ? <button className="btn btn-danger" disabled>Račun nije proknjižen!</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
 
   ));
   return  (<div>{racuni}</div>);
@@ -255,7 +255,9 @@ const handleSubmit = (event) => {
       {
           //console.log(response);
           closeUnosKomentarModal();
-          closeKomentarModal();
+          GetRoomKomentar(RoomInfo.Soba.Id);
+          ModalKomentarData();
+          //closeKomentarModal();
       }
     })
     .catch(function (response) {
@@ -275,8 +277,8 @@ const handleSubmit = (event) => {
         <h3>Kat: {VratiKat(RoomInfo.Soba.Kat)}</h3>
         <h3>Broj studenta po sobi: {RoomInfo.Soba.BrojMjesta}</h3>
         <h3>Tip: {VrstaSobe(RoomInfo.Soba.Tip)}</h3>
-        <button className="btn btn-primary mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
-        <button className="btn btn-primary mt-3" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
+        <button className="btn btn-primary mt-3 marginButtons" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
+        <button className="btn btn-primary mt-3 marginButtons" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
         </div>
        </div>
   <Modal
@@ -289,7 +291,7 @@ const handleSubmit = (event) => {
   <h2 className="text-center RoomInfoStyle">Komentari</h2>
  <ModalKomentarData />
   <div className="mt-2">
-  <button className="btn btn-danger mt-3" onClick={closeKomentarModal}>Close</button>
+  <button className="btn btn-outline-danger mt-3" onClick={closeKomentarModal}>Close</button>
   </div>
 </Modal>
 
@@ -303,7 +305,7 @@ contentLabel="Soba info">
 <h2 className="text-center RoomInfoStyle">Unesite novi komentar</h2>
 <ModalUnosKomentar />
 <div className="mt-2">
-<button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
+<button className="btn btn-outline-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
 </div>
 </Modal>
 <Modal
@@ -316,7 +318,7 @@ contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Računi:</h2>
              <ModalRacunStudent />
              <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
+             <button className="btn btn-outline-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
              </div>
            </Modal>
 

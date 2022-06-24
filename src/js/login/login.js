@@ -101,6 +101,15 @@ export default function Login()
       setInputs(values => ({...values, [username]: lozinka}))
       }  
 
+
+      function ClearInputs()
+      {
+        inputs.Email= "";
+        inputs.Login = "";
+        inputs.Oib = "";
+      }
+
+
 if(type === "studentLogin")
 {
   inputs.login = "student";

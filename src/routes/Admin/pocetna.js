@@ -3,7 +3,7 @@ import prvikat from "../../img/1kat.png"
 import {useState,useEffect} from 'react';
 import Modal from 'react-modal';
 import axios from "axios";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
+
 
 export default function PocetnaAdmin()
 {
@@ -117,8 +117,8 @@ function Katovi() //Prikaz slike ovisno o katu
     {
         return(
             <>
-            <button className="btn btn-success" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
-            <button className="btn btn-danger" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
+            <button className="btn btn-success marginButtons" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
+            <button className="btn btn-danger marginButtons" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
             </>
         )
     }
@@ -126,8 +126,8 @@ function Katovi() //Prikaz slike ovisno o katu
     {
         return(
             <>
-            <button className="btn btn-danger" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
-            <button className="btn btn-success" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
+            <button className="btn btn-danger marginButtons" onClick={()=>PromjeniKat("prizemlje")}>Prizemlje</button>
+            <button className="btn btn-success marginButtons" onClick={()=>PromjeniKat("prvikat")}>Prvi kat</button>
             </>
         )
     }
@@ -228,9 +228,7 @@ function GetRoomKomentar(SobaId)
         .catch(function (response) {
           //handle error
           console.log(response);
-        });   
-    
-//
+        });     
 openKomentarModal();
 }
 
@@ -254,7 +252,9 @@ const handleSubmit = (event) => {
         {
             //console.log(response);
             closeUnosKomentarModal();
-            closeKomentarModal();
+            GetRoomKomentar(RoomInfo.Soba.Id);
+            ModalKomentarData();
+            //closeKomentarModal();
         }
       })
       .catch(function (response) {
@@ -386,7 +386,7 @@ function ModalData()
         {IspisStudenta(RoomInfo.Studenti)}
         </div>
         <button className="btn mt-3" onClick={()=>PopupRoom(RoomInfo.Soba.Tip)}>3D prikaz sobe</button>
-        <button className="btn mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
+        {RoomInfo.Studenti!== "" ?<button className="btn mt-3" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)} >Komentari</button> : <button className="btn mt-3" disabled>Komentari</button>}
         {RacunButton(RoomInfo.Studenti,RoomInfo.Soba.Id)}
         </>
     )
@@ -415,18 +415,18 @@ function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
 
     const list = KomentarRoom.map((k)=>
     (
-     <li key={k.Id}>{k.Vlasnik}: {k.Komentar}</li>
+     <li key={k.Id}><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li>
     ));
 
 
 
     return(
-        <>
+        <div>
         <ul>
         {list}
         </ul>
         <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
-        </>
+        </div>
     );
 }
 
@@ -434,12 +434,12 @@ function ModalUnosKomentar()
 {
     //console.log(inputs.Komentar);
     return(<form onSubmit={handleSubmit}>
-        <textarea className=""
+        <textarea className="d-flex p-2 textareaClass"
         name="Komentar"
         //value={inputs.Komentar || ""}
       //  onChange={handleChange}
         ></textarea>
-        <button type="submit">Submit</button>
+        <button type="submit" className="btn btn-success mt-2">Submit</button>
          </form>)
 }
 
@@ -449,7 +449,7 @@ function ModalOdabirStudenta()
 
     const list = studentOdabir.map((s)=>
     (
-      <button key={s.Id} className="btn" onClick={()=>GetStudentRacun(s.Id)}>{s.Ime} {s.Prezime}</button>
+      <button key={s.Id} className="btn btn-outline-info" onClick={()=>GetStudentRacun(s.Id)}>{s.Ime} {s.Prezime}</button>
     ));
 
     return (<div className="text-center">{list}</div>);
@@ -461,11 +461,44 @@ function ModalRacunStudent()
   if(!studentRacun) return(<h3>Student nema račun!</h3>)
 
   const racuni = studentRacun.map((racun)=>(
-    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn</h4>
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno == 0 ? <button className="btn btn-danger" onClick={()=>PlaceniRacun(racun.Id,racun.StudentId)}>Promjeni stanje</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
 
   ));
   return  (<div>{racuni}</div>);
 }
+
+function PlaceniRacun(RacunId,StudentId)
+{
+  if(window.confirm("Potvrdite radnju:"))
+  {
+    axios({
+      method: "post",
+      url: readUrl,
+      data: 
+      {
+          "json":"PlaceniRacunStudent",
+          "RacunId":RacunId
+       
+      },
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then(function (response) {
+        console.log(response.data);
+        
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response.data);
+        alert("Error!");
+      });
+      //ModalRacun();
+      GetStudentRacun(StudentId);
+      ModalRacunStudent();
+           
+  }
+ 
+}
+
 
 function CloseAllModal()
 {
@@ -475,7 +508,6 @@ function CloseAllModal()
   closeRacunStudentModal();
   closeUnosKomentarModal();
 }
-
 
      return(
         <>
@@ -495,7 +527,7 @@ function CloseAllModal()
              <h2 className="text-center RoomInfoStyle">Informacije o sobi</h2>
              <ModalData/>
              <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeModal}>Close</button>
+             <button className="btn btn-outline-danger mt-3" onClick={closeModal}>Close</button>
              </div>
            </Modal>
            <Modal
@@ -507,9 +539,9 @@ function CloseAllModal()
              contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Komentari</h2>
             <ModalKomentarData />
-             <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeKomentarModal}>Close</button>
-             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             <div className="mt-2 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeKomentarModal}>Close</button>
              </div>
            </Modal>
            <Modal
@@ -521,9 +553,9 @@ function CloseAllModal()
              contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Unesite novi komentar</h2>
             <ModalUnosKomentar />
-             <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
-             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             <div className="mt-2 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeUnosKomentarModal}>Close</button>
              </div>
            </Modal>
 
@@ -536,12 +568,11 @@ function CloseAllModal()
              contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Odaberite studenta:</h2>
              <ModalOdabirStudenta />
-             <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeOdabirStudentModal}>Close</button>
-             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             <div className="mt-2 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeOdabirStudentModal}>Close</button>
              </div>
            </Modal>
-
            <Modal
              isOpen={modalRacunStudent}
              //onAfterOpen={afterOpenModal}
@@ -551,12 +582,11 @@ function CloseAllModal()
              contentLabel="Soba info">
              <h2 className="text-center RoomInfoStyle">Računi:</h2>
              <ModalRacunStudent />
-             <div className="mt-2">
-             <button className="btn btn-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
-             <button className="btn btn-danger mt-3" onClick={CloseAllModal}>Close all</button>
+             <div className="mt-2 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
+             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeRacunStudentModal}>Close</button>
              </div>
            </Modal>
-
 
         </>
     )

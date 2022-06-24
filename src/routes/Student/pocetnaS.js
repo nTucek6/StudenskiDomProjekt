@@ -20,7 +20,6 @@ export default function MainS()
         <nav className='navigacija'>
         <img id="logo"  src={logo}/ >
         <Link className='btn' to={`/status/${id}`}>Status sobe</Link>
-        <Link className='btn' to={`/racuni/${id}`}>Racuni</Link>
         <div id="OdjavaBtn"><button className="btn btn-danger" onClick={() => AreYouSure()}>Odjava</button></div>
         </nav>
         </div>

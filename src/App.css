@@ -69,9 +69,14 @@ color:red;
 }
 #OdjavaBtn
 {
-  display: inline;
+ /* display: inline;
   position: absolute;
-  right: 0; 
+  right: 0; */
+  display: inline;
+  float: right;
+  
+
+   
   
 }
 
@@ -113,6 +118,21 @@ left: 42%;
   font-style: italic;
 }
 
+.marginButtons
+{
+  margin-left: 3px;
+}
+
+.textareaClass
+{
+  width: 100%;
+}
+
+.komentarStyle
+{
+  text-decoration: underline;
+  text-decoration-color: #282c34;
+}
 
 
 

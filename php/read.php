@@ -468,13 +468,27 @@ switch ($_POST['json']) {
                                             {
                                                 while($oRow = $result->fetch(PDO::FETCH_BOTH))
                                                 {
-                                                    $racun = new Racun($oRow['Id'],$oRow['StudentId'],$oRow['Iznos'],$oRow['DatumUplate']);
+                                                    $racun = new Racun($oRow['Id'],$oRow['StudentId'],$oRow['Iznos'],$oRow['DatumUplate'],$oRow['Placeno']);
                                                     array_push($oRacuni,$racun);
 
                                                 }
                                                 echo json_encode($oRacuni);
                                             }
                                             break;
+
+                                        case 'PlaceniRacunStudent':
+                                            $query = "Update stanarinastudenti set Placeno=1 where Id=".$_POST['RacunId'];
+                                            $result = $oConnection->query($query);
+                                            if($result->rowCount()>0)
+                                            {
+                                                echo json_encode("Operation successful");
+                                            }
+                                            else
+                                            {
+                                                echo json_encode("Operation unsuccessful");
+                                            }
+
+                                        break;
 
 }
 }

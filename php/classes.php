@@ -93,12 +93,14 @@ class Komentar
 
 class Racun
 {
-    public function __construct($i,$si,$iz,$du)
+    public function __construct($i,$si,$iz,$du,$p)
     {
         $this->Id = $i;
         $this->StudentId = $si;
         $this->Iznos = $iz;
         $this->DatumUplate = $du;
+        $this->Placeno = $p;
+
     }
 
 
