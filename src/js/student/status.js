@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import {useState,useEffect} from "react";
 import axios from "axios";
-import Modal from 'react-modal';
+import ShowModal from "../components/Modal";
 
 export default function StudentInfo()
 {
@@ -18,31 +18,30 @@ export default function StudentInfo()
 
     async function UcitajPodatke()
     {
-            axios({
-                method: "post",
-                url: "http://localhost/studenskidom/php/read.php",
-                data: 
-                {
-                    "Id":id,
-                    "json":"StudentInfoRoom"
-                },
-                headers: { "Content-Type": "multipart/form-data" },
-              })
-                .then(function (response) {
-                    setData(response.data);
-                  //console.log(response);
-                })
-                .catch(function (response) {
-                  //handle error
-                  console.log(response);
-                });   
+    axios({
+        method: "post",
+        url: "http://localhost/studenskidom/php/read.php",
+        data: 
+        {
+            "Id":id,
+            "json":"StudentInfoRoom"
+        },
+        headers: { "Content-Type": "multipart/form-data" },
+         })
+        .then(function (response) {
+            setData(response.data);
+          //console.log(response);
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response);
+        });   
     }
 
     if(!RoomInfo) return null;
 
     function UpisanUDom(Upisan)
-    {
-     
+    {     
       if(Upisan === "0")
       {
         return(<h4>Student još nije upisan u studenski dom.</h4>)
@@ -51,11 +50,8 @@ export default function StudentInfo()
       {
         return(<h4>Info: Studentu još nije određena soba!</h4>)
       }
-
     }
 
-
-    
     if(RoomInfo.Soba.BrojSobe== "null")
     {
       return (
@@ -90,7 +86,6 @@ export default function StudentInfo()
     {
         return ("jednokrevetna soba");
     }
-
 }
 
 function GetRoomKomentar(SobaId)
@@ -102,7 +97,6 @@ function GetRoomKomentar(SobaId)
         {
             "json":"GetRoomKomentar",
             "SobaId":SobaId
-         
         },
         headers: { "Content-Type": "multipart/form-data" },
       })
@@ -114,11 +108,8 @@ function GetRoomKomentar(SobaId)
           //handle error
           console.log(response);
         });   
-    
-//
 openKomentarModal();
 }
-
 
 function GetStudentRacun(StudentId)
 {
@@ -129,7 +120,6 @@ function GetStudentRacun(StudentId)
     {
         "json":"GetStudentRacun",
         "StudentId":StudentId
-     
     },
     headers: { "Content-Type": "multipart/form-data" },
   })
@@ -141,11 +131,8 @@ function GetStudentRacun(StudentId)
       //handle error
       console.log(response);
     });   
-
     openRacunStudentModal();
-
 }
-
 
 const customStyles = {
   content: {
@@ -163,26 +150,22 @@ function openKomentarModal()
 {
   setModalKomentar(true);
 }
-
 function closeKomentarModal()
 {
   setModalKomentar(false);
 }
-
 function openUnosKomentarModal() {
   setModalUnosKomentar(true);
 }
 function closeUnosKomentarModal() {
   setModalUnosKomentar(false);
 }
-
 function openRacunStudentModal() {
   setmodalRacunStudent(true);
 }
 function closeRacunStudentModal() {
   setmodalRacunStudent(false);
 }
-
 
 function ModalKomentarData()
 {
@@ -196,8 +179,6 @@ function ModalKomentarData()
      <li key={k.Id}><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li>
     ));
 
-
-
     return(
         <div>
         <ul>
@@ -207,7 +188,6 @@ function ModalKomentarData()
         </div>
     );
 }
-
 
 function ModalUnosKomentar()
 {
@@ -232,8 +212,6 @@ function ModalRacunStudent()
   ));
   return  (<div>{racuni}</div>);
 }
-
-
 
 const handleSubmit = (event) => {
   event.preventDefault();
@@ -266,8 +244,15 @@ const handleSubmit = (event) => {
     });  
   }
 
-
-
+function CloseAllBtn()
+{
+  return(<button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>);
+}
+function CloseAllModal()
+{
+  closeKomentarModal();
+  closeUnosKomentarModal();
+}
     return(
       <>
        <div className="container mt-5">
@@ -281,50 +266,9 @@ const handleSubmit = (event) => {
         <button className="btn btn-primary mt-3 marginButtons" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
         </div>
        </div>
-  <Modal
-  isOpen={modalKomentar}
-  //onAfterOpen={afterOpenModal}
-  onRequestClose={closeKomentarModal}
-  style={customStyles}
-  ariaHideApp={false}
-  contentLabel="Soba info">
-  <h2 className="text-center RoomInfoStyle">Komentari</h2>
- <ModalKomentarData />
-  <div className="mt-2">
-  <button className="btn btn-outline-danger mt-3" onClick={closeKomentarModal}>Close</button>
-  </div>
-</Modal>
-
-<Modal
-isOpen={modalUnosKomentar}
-//onAfterOpen={afterOpenModal}
-onRequestClose={closeUnosKomentarModal}
-style={customStyles}
-ariaHideApp={false}
-contentLabel="Soba info">
-<h2 className="text-center RoomInfoStyle">Unesite novi komentar</h2>
-<ModalUnosKomentar />
-<div className="mt-2">
-<button className="btn btn-outline-danger mt-3" onClick={closeUnosKomentarModal}>Close</button>
-</div>
-</Modal>
-<Modal
-             isOpen={modalRacunStudent}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeRacunStudentModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Računi:</h2>
-             <ModalRacunStudent />
-             <div className="mt-2">
-             <button className="btn btn-outline-danger mt-3" onClick={closeRacunStudentModal}>Close</button>
-             </div>
-           </Modal>
-
+       {ShowModal(modalKomentar,closeKomentarModal,customStyles,ModalKomentarData,"Komentari",null)}
+       {ShowModal(modalUnosKomentar,closeUnosKomentarModal,customStyles,ModalUnosKomentar,"Unesite novi komentar",CloseAllBtn)}
+       {ShowModal(modalRacunStudent,closeRacunStudentModal,customStyles,ModalRacunStudent,"Računi:",null)}
 </>
-
     );
-
-
 }

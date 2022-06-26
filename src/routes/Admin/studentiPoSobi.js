@@ -1,14 +1,9 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
-import {useNavigate } from 'react-router-dom';
-//import { Outlet, Link } from "react-router-dom";
-//import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
-//import paginationFactory from 'react-bootstrap-table2-paginator';
-import Modal from 'react-modal';
 import React from 'react';
 import trashbin from '../../img/trash-can.png';
-//import { Button } from "bootstrap";
+import ShowModal from "../../js/components/Modal";
 
 
 export default function StudentiPoSobama()
@@ -152,7 +147,7 @@ export default function StudentiPoSobama()
       return null;
     }
     return(
-      <div className="mt-3 text-center ">
+      <div className="mt-3 text-center">
          {BrisanjeOdabir.map((student)=>(<button key={student.Id} className="btn btn-warning marginButtons" onClick={()=>DeleteStudent(student.Id)}>{student.Ime + " " + student.Prezime}</button>))}
        </div>)
     
@@ -212,7 +207,13 @@ export default function StudentiPoSobama()
       </tfoot>
       </table>
       </div>
-      <Modal
+      {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Odaberite studenta kojega želite ukloniti iz sobe:",null)}
+      </div>
+      );
+}
+
+/*
+<Modal
              isOpen={modalIsOpen}
              //onAfterOpen={afterOpenModal}
              onRequestClose={closeModal}
@@ -225,9 +226,8 @@ export default function StudentiPoSobama()
              <button className="btn btn-outline-danger p-2" onClick={closeModal}>Close</button>
              </div>
            </Modal>
-      </div>
-      );
-}
+
+*/
 
 
 

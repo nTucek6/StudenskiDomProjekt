@@ -189,7 +189,8 @@ switch ($_POST['json']) {
                             $oRow = $result->fetch(PDO::FETCH_BOTH);
                             $spol = $oRow['Spol'];
                             //////////////////////////////////////////////////////////////////////////////
-                            $query = "Select sobe.Id,BrojSobe,sobe.BrojMjesta,studenti.Spol from sobe inner join studentposobi on sobe.Id = studentposobi.SobaId inner join studenti on studentposobi.StudentId = studenti.Id GROUP BY sobe.Id having sobe.BrojMjesta > Count(studentposobi.SobaId) ";
+                            $query = "Select sobe.Id,BrojSobe,sobe.BrojMjesta,studenti.Spol from sobe inner join studentposobi on sobe.Id = studentposobi.SobaId inner join studenti on studentposobi.StudentId = studenti.Id GROUP BY sobe.Id having sobe.BrojMjesta > Count(studentposobi.SobaId)";
+                            //upit vraca sobe koje imaju jednu osobu ali nisu pune
                             $result = $oConnection->query($query);
                             $count = $result->rowCount($result);
                             if($count > 0)
@@ -201,13 +202,14 @@ switch ($_POST['json']) {
                                         "Soba"=>$oRow['Id'],
                                         "Spol"=>$oRow['Spol']
                                     ];
-                                    array_push($sssM,$data);
+                                    array_push($sssM,$data); 
                                 }
                             }
                          
                             //var_dump($sssM);
                             /////////////////////////////////////////////////////////////////////////////
                             $query = "Select sobe.Id,BrojSobe,sobe.BrojMjesta from sobe INNER join studentposobi on sobe.Id = studentposobi.SobaId GROUP BY studentposobi.SobaId having sobe.BrojMjesta = Count(studentposobi.SobaId)";
+                            //upit vraca sobe koje su pune
                             $result = $oConnection->query($query);
                             $count = $result->rowCount($result);
                             if($count > 0)
@@ -217,9 +219,6 @@ switch ($_POST['json']) {
                                     array_push($punesobe,$oRow['Id']);
                                 }
                             }
-                         
-                            //var_dump($punesobe);
-
                             $sobeCount = count($oSobe);
                             for ($i=0; $i < $sobeCount; $i++) 
                             { 
@@ -227,14 +226,13 @@ switch ($_POST['json']) {
                                 {
                                     for ($j=0; $j < count($punesobe); $j++) 
                                     { 
-                                        if($oSobe[$i]->Id == $punesobe[$j])
+                                        if($oSobe[$i]->Id == $punesobe[$j]) //ako je id pune sobe jednak id sobe onda se uklanja iz liste
                                         {
                                             unset($oSobe[$i]);
-                                            break;
+                                            break; //na prvom pronalasku moramo break jer for jos ne mora biti gotov a sobe moze biti obrisana
                                         }  
                                     }
                                 }
-                             
                                 if(count($sssM) > 0)
                                 {
                                     for ($k=0; $k <count($sssM); $k++) 
@@ -249,9 +247,34 @@ switch ($_POST['json']) {
                                     } 
                                 }
                             }
-
                             $oSobe =array_values($oSobe);
-                            echo json_encode($oSobe);
+
+                            $returndata = array();
+
+                            foreach($oSobe as $soba)
+                            {
+                                $query = "select Ime,Prezime from studenti left join studentposobi on studentposobi.StudentId = studenti.Id where studentposobi.SobaId =".$soba->Id;
+                                $result = $oConnection->query($query);
+                                if($result->rowCount()>0)
+                                {
+                                    $oRow = $result->fetch(PDO::FETCH_BOTH);
+                                    $list = new StudentSobaList($soba,(object)["Ime"=>$oRow['Ime'],"Prezime"=>$oRow['Prezime']]);
+                                    array_push($returndata,$list);
+                                   /* (object)
+                                    [
+                                        "Soba"=>$oRow['Id'],
+                                        "Spol"=>$oRow['Spol']
+                                    ]; */
+                                }
+                                else
+                                {
+                                    $list = new StudentSobaList($soba,(object)["Ime"=>"","Prezime"=>""]);
+                                    array_push($returndata,$list);
+                                }
+                            }
+
+                            echo json_encode($returndata);
+                           // echo json_encode($oSobe);
                             break;
                             case 'InsertStudentRoom':
                                 ///////////////////////////////////////////////////////////////////////

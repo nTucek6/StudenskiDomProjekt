@@ -1,8 +1,8 @@
 import prizemlje from "../../img/prizemlje.png"
 import prvikat from "../../img/1kat.png"
-import {useState,useEffect} from 'react';
-import Modal from 'react-modal';
+import {useState} from 'react';
 import axios from "axios";
+import ShowModal from "../../js/components/Modal";
 
 
 export default function PocetnaAdmin()
@@ -461,7 +461,7 @@ function ModalRacunStudent()
   if(!studentRacun) return(<h3>Student nema račun!</h3>)
 
   const racuni = studentRacun.map((racun)=>(
-    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno == 0 ? <button className="btn btn-danger" onClick={()=>PlaceniRacun(racun.Id,racun.StudentId)}>Promjeni stanje</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno === "0" ? <button className="btn btn-danger" onClick={()=>PlaceniRacun(racun.Id,racun.StudentId)}>Promjeni stanje</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
 
   ));
   return  (<div>{racuni}</div>);
@@ -509,6 +509,10 @@ function CloseAllModal()
   closeUnosKomentarModal();
 }
 
+function CloseAllBtn()
+{
+ return (<button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>);
+}
      return(
         <>
         <div className="text-center mt-3 ">
@@ -517,77 +521,11 @@ function CloseAllModal()
         <div className="mt-3 mb-5 text-center areaMap">
         <Katovi />
        </div>
-       <Modal
-             isOpen={modalIsOpen}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Informacije o sobi</h2>
-             <ModalData/>
-             <div className="mt-2">
-             <button className="btn btn-outline-danger mt-3" onClick={closeModal}>Close</button>
-             </div>
-           </Modal>
-           <Modal
-             isOpen={modalKomentar}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeKomentarModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Komentari</h2>
-            <ModalKomentarData />
-             <div className="mt-2 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeKomentarModal}>Close</button>
-             </div>
-           </Modal>
-           <Modal
-             isOpen={modalUnosKomentar}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeUnosKomentarModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Unesite novi komentar</h2>
-            <ModalUnosKomentar />
-             <div className="mt-2 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeUnosKomentarModal}>Close</button>
-             </div>
-           </Modal>
-
-           <Modal
-             isOpen={modalOdabirStudent}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeOdabirStudentModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Odaberite studenta:</h2>
-             <ModalOdabirStudenta />
-             <div className="mt-2 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeOdabirStudentModal}>Close</button>
-             </div>
-           </Modal>
-           <Modal
-             isOpen={modalRacunStudent}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeRacunStudentModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Soba info">
-             <h2 className="text-center RoomInfoStyle">Računi:</h2>
-             <ModalRacunStudent />
-             <div className="mt-2 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={CloseAllModal}>Close all</button>
-             <button className="btn btn-outline-danger mt-3 p-2 marginButtons" onClick={closeRacunStudentModal}>Close</button>
-             </div>
-           </Modal>
-
+           {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Informacije o sobi",null)}
+           {ShowModal(modalKomentar,closeKomentarModal,customStyles,ModalKomentarData,"Komentari",CloseAllBtn)}
+           {ShowModal(modalUnosKomentar,closeUnosKomentarModal,customStyles,ModalUnosKomentar,"Unesite novi komentar",CloseAllBtn)}
+           {ShowModal(modalOdabirStudent,closeOdabirStudentModal,customStyles,ModalOdabirStudenta,"Odaberite studenta:",CloseAllBtn)}
+           {ShowModal(modalRacunStudent,closeRacunStudentModal,customStyles,ModalRacunStudent,"Računi:",CloseAllBtn)}
         </>
     )
 }

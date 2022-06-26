@@ -1,7 +1,7 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
 import addbnt from '../../img/add.png';
-import Modal from 'react-modal';
+import ShowModal from "../../js/components/Modal";
 
 export default function StudentBezSobe()
 {
@@ -9,6 +9,8 @@ export default function StudentBezSobe()
     const [SlobodneSobe,setSlobodneSobe] = useState(null);
     const [student,setStudent] = useState(null);
     const [soba,setSoba] = useState();
+    const [sviStudenti,setsviStudenti] = useState();
+    
     const [modalIsOpen, setIsOpen] = useState(false);
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);
@@ -43,12 +45,13 @@ export default function StudentBezSobe()
       
         const customStyles = {
             content: {
-              top: '15%',
+              top: '20%',
               left: '50%',
               right: 'auto',
               bottom: 'auto',
               marginRight: '-50%',
               transform: 'translate(-50%, -50%)',
+              width:"30%",
             },
           };
       
@@ -82,8 +85,7 @@ export default function StudentBezSobe()
                 .catch(function (response) {
                   //handle error
                   console.log(response);
-                });   
-
+                });
               setStudent(StudentId);
               openModal();
           }
@@ -124,28 +126,20 @@ export default function StudentBezSobe()
                 </tr>
             )
           }
-/*
-        let i = 1;
-        const list = studenti.map((student) => (
-            <tr key={student.Id.toString()} className="text-center">
-                <td>{i++}</td>
-                <td>{student.Ime}</td>
-                <td>{student.Prezime}</td>
-                <td>{student.OIB}</td>
-                <td><img id="BtnHover" src={addbnt} onClick={()=>AfterClick()} /></td>
-            </tr>
-                )) */
 
                 function ModalData() //Ispis studenata za brisanje iz sobe
                 {
                   if(!SlobodneSobe)
                   {
-                    return null;
+                    return (<h3>Sve sobe su popunjene</h3>);
                   }
                   return(
                     <div>
-                      <select value={soba} onChange={(e) => setSoba(e.target.value)}><option></option>{SlobodneSobe.map((soba)=>(<option key={soba.Id}>{soba.BrojSobe}</option>))}</select>
-                      <button onClick={()=> DodajUSobu(soba)}>Dodaj </button>
+                      <select className="form-select" value={soba} onChange={(e) => setSoba(e.target.value)}><option></option>
+                      {SlobodneSobe.map((soba)=>
+                      (<option value={soba.Soba.BrojSobe} key={soba.Soba.Id}>Soba: {soba.Soba.BrojSobe}{soba.Studenti.Ime !== "" && soba.Studenti.Prezime!==""? <>, Student: {soba.Studenti.Ime} {soba.Studenti.Prezime}</>: null} </option>))}
+                      </select>
+                      <button className="btn btn-success mt-2" onClick={()=> DodajUSobu(soba)}>Dodaj </button>
                      </div>)
                   
               //<li key={student.Id}>{student.Ime + " " + student.Prezime}</li>
@@ -159,6 +153,7 @@ export default function StudentBezSobe()
                   }
                   else
                   {
+                  
                     axios({
                       method: "post",
                       url: readUrl,
@@ -181,12 +176,8 @@ export default function StudentBezSobe()
                       window.location.reload(false); 
                   }
                 }
-              
 
-
-            
-        return(
-          
+        return(          
         <table className="container table mt-5">
             <thead>
                 <tr className="text-center">
@@ -203,25 +194,25 @@ export default function StudentBezSobe()
             <tfoot>
             <Pagination postPerPage={postPerPage} totalPosts={studenti.length} paginate={paginate} />
             </tfoot>
-            <Modal
+            {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Odaberite sobu:",null)}
+        </table>);
+        
+}
+
+/*
+
+<Modal
              isOpen={modalIsOpen}
              //onAfterOpen={afterOpenModal}
              onRequestClose={closeModal}
              style={customStyles}
              ariaHideApp={false}
-             contentLabel="Delete Student">
+             contentLabel="modal">
              <h2 >Odaberite sobu:</h2>
               <ModalData />
-             <div className="mt-2">
-             <button onClick={closeModal}>Close</button>
+             <div className="mt-4 d-flex flex-row-reverse">
+             <button className="btn btn-outline-danger p-2" onClick={closeModal}>Close</button>
              </div>
            </Modal>
-        </table>);
-        
 
-
-
-
-
-
-}
+*/
