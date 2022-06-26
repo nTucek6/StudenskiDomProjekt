@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2022 at 11:58 PM
+-- Generation Time: Jun 27, 2022 at 01:02 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -117,7 +117,10 @@ CREATE TABLE `sobakomentar` (
 INSERT INTO `sobakomentar` (`Id`, `SobaId`, `Komentar`, `Vlasnik`, `VlasnikId`) VALUES
 (14, 3, 'Najčišća soba u domu.', 'Voditelj', 1),
 (15, 4, 'Noge mu smrde!!!', 'Voditelj', 1),
-(16, 4, 'Nije istina!', 'Student', 1);
+(16, 4, 'Nije istina!', 'Student', 1),
+(19, 3, 'Hvala. :)', 'Student', 4),
+(23, 4, 'Sve ja znam!', 'Student', 1),
+(24, 3, 'Stanje dalje odlično!', 'Voditelj', 1);
 
 -- --------------------------------------------------------
 
@@ -181,15 +184,17 @@ CREATE TABLE `stanarinastudenti` (
   `Id` int(11) NOT NULL,
   `StudentId` int(11) NOT NULL,
   `Iznos` decimal(10,2) NOT NULL,
-  `DatumUplate` date NOT NULL
+  `DatumUplate` date NOT NULL,
+  `Placeno` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `stanarinastudenti`
 --
 
-INSERT INTO `stanarinastudenti` (`Id`, `StudentId`, `Iznos`, `DatumUplate`) VALUES
-(1, 1, '400.00', '2021-10-06');
+INSERT INTO `stanarinastudenti` (`Id`, `StudentId`, `Iznos`, `DatumUplate`, `Placeno`) VALUES
+(1, 1, '400.00', '2021-10-06', 1),
+(2, 1, '400.00', '2021-11-10', 0);
 
 -- --------------------------------------------------------
 
@@ -265,9 +270,8 @@ INSERT INTO `studentposobi` (`Id`, `SobaId`, `StudentId`) VALUES
 (28, 12, 7),
 (3, 3, 3),
 (5, 5, 5),
-(27, 12, 2),
-(15, 3, 4),
-(21, 5, 6);
+(33, 3, 4),
+(29, 5, 6);
 
 --
 -- Indexes for dumped tables
@@ -353,7 +357,7 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `sobakomentar`
 --
 ALTER TABLE `sobakomentar`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `sobe`
@@ -365,7 +369,7 @@ ALTER TABLE `sobe`
 -- AUTO_INCREMENT for table `stanarinastudenti`
 --
 ALTER TABLE `stanarinastudenti`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `studentbodovi`
@@ -383,7 +387,7 @@ ALTER TABLE `studenti`
 -- AUTO_INCREMENT for table `studentposobi`
 --
 ALTER TABLE `studentposobi`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
