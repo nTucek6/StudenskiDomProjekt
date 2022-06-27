@@ -138,7 +138,7 @@ export default function StudentBezSobe()
                     <div>
                       <select className="form-select" value={soba} onChange={(e) => setSoba(e.target.value)}><option></option>
                       {SlobodneSobe.map((soba)=>
-                      (<option value={soba.Soba.BrojSobe} key={soba.Soba.Id}>Soba: {soba.Soba.BrojSobe}{soba.Studenti.Ime !== "" && soba.Studenti.Prezime!==""? <>, Student: {soba.Studenti.Ime} {soba.Studenti.Prezime}</>: null} </option>))}
+                      (<option value={soba.Soba.BrojSobe} key={soba.Soba.Id}>Soba: {soba.Soba.BrojSobe}, Tip: {soba.Soba.Tip}{soba.Studenti.Ime !== "" && soba.Studenti.Prezime!==""? <>, Student: {soba.Studenti.Ime} {soba.Studenti.Prezime}</>: null} </option>))}
                       </select>
                       <button className="btn btn-success mt-2" onClick={()=> DodajUSobu(soba)}>Dodaj </button>
                      </div>)

@@ -289,11 +289,11 @@ switch ($_POST['json']) {
 
                                 if($result->rowCount() > 0)
                                 {
-                                    echo json_decode("Operation successful");
+                                    echo json_encode("Operation successful");
                                 }
                                 else
                                 {
-                                    echo json_decode("Operation unsuccessful");
+                                    echo json_encode("Operation unsuccessful");
                                 }
                                 break;
 
@@ -424,6 +424,7 @@ switch ($_POST['json']) {
                                             $SobaId = $oRow['SobaId'];
                                             $Komentar = $oRow['Komentar'];
                                             $VlasnikId = $oRow['VlasnikId'];
+                                            $VrijemeUnosa =$oRow['VrijemeUnosa'];
                                             $Vlasnik = "";
                                             if($oRow['Vlasnik'] == "Voditelj")
                                             {
@@ -438,7 +439,7 @@ switch ($_POST['json']) {
                                             }
 
                                             
-                                            $komentar = new Komentar($id,$SobaId,$Komentar,$Vlasnik,$VlasnikId);
+                                            $komentar = new Komentar($id,$SobaId,$Komentar,$Vlasnik,$VlasnikId,$VrijemeUnosa);
                                             array_push($oKomentari,$komentar);
                                         }
 
@@ -450,7 +451,7 @@ switch ($_POST['json']) {
                                         break;
 
                                     case 'AddRoomKomentar':
-                                        $query = "Insert into sobakomentar (SobaId,Komentar,Vlasnik,VlasnikId) values(".$_POST['SobaId'].",'".$_POST['Komentar']."','".$_POST['Vlasnik']."',".$_POST['VlasnikId'].")";
+                                        $query = "Insert into sobakomentar (SobaId,Komentar,Vlasnik,VlasnikId,VrijemeUnosa) values(".$_POST['SobaId'].",'".$_POST['Komentar']."','".$_POST['Vlasnik']."',".$_POST['VlasnikId'].",'".$_POST['VrijemeUnosa']."')";
                                         $result = $oConnection->query($query);
                                         if($result)
                                         {

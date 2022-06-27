@@ -81,13 +81,14 @@ $this->BrojBodova = $b;
 
 class Komentar
 {
-    public function __construct($i,$si,$k,$v,$vi)
+    public function __construct($i,$si,$k,$v,$vi,$vu)
     {
         $this->Id = $i;
         $this->SobaId = $si;
         $this->Komentar = $k;
         $this->Vlasnik = $v;
         $this->VlasnikId = $vi;
+        $this->VrijemeUnosa = $vu;
     }
 }
 

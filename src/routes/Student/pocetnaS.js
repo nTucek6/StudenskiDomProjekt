@@ -8,12 +8,11 @@ export default function MainS()
   const navigate = useNavigate(); 
   function AreYouSure()
   {
-    if(window.confirm("Are you sure?"))
+    if(window.confirm("Odjava?"))
     {
       navigate('/Prijava/studentLogin');
     }
   }
-//<h3>Studenski Dom</h3>
     return (
         <>
         <div id='main'>
@@ -26,5 +25,4 @@ export default function MainS()
         <Outlet />
         </>
       );
-
 }

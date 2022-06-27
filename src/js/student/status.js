@@ -12,6 +12,9 @@ export default function StudentInfo()
     const [KomentarRoom,setKomentarRoom] = useState();
     const [modalRacunStudent, setmodalRacunStudent] = useState(false);
     const [studentRacun, setStudentRacun] = useState();
+    const [currentPage,setCurrentPage] = useState(1);
+    const [postPerPage] = useState(5);
+     
     const readUrl = "http://localhost/studenskidom/php/read.php";
 
     useEffect(() => {UcitajPodatke();}, []);
@@ -44,7 +47,7 @@ export default function StudentInfo()
     {     
       if(Upisan === "0")
       {
-        return(<h4>Student još nije upisan u studenski dom.</h4>)
+        return(<h4>Student nije upisan u studenski dom.</h4>)
       }
       else if(Upisan === "1")
       {
@@ -52,7 +55,7 @@ export default function StudentInfo()
       }
     }
 
-    if(RoomInfo.Soba.BrojSobe== "null")
+    if(RoomInfo.Soba.BrojSobe === "null")
     {
       return (
         <div className="container mt-5">
@@ -174,6 +177,56 @@ function ModalKomentarData()
         return (<><h3>Soba ne sadrži ni jedan komentar</h3>  <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button></>);
     }
 
+
+    const Posts =({posts}) => 
+    {
+      const list = posts.map((k) => (
+        <tr key={k.Id}><td><li><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar} | Vrijeme unosa: {k.VrijemeUnosa}</li></td></tr>
+              ));
+              return list;
+    }
+
+    const indexOfLastPost = currentPage * postPerPage;
+    const indexOfFirstPost = indexOfLastPost - postPerPage;
+    const currentPost = KomentarRoom.slice(indexOfFirstPost,indexOfLastPost);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
+    {
+      const pageNumbers = [];
+      for(let i=1; i<=Math.ceil(totalPosts/postPerPage);i++)
+      {
+        pageNumbers.push(i);
+      }
+      return(
+          <tr className="pagination">
+        {pageNumbers.map(number =>(
+          <td key={number} className="page-item">
+            <button onClick={()=>paginate(number)} href='' className="page-link">{number}</button>
+          </td>
+        ))}
+          </tr>
+      )
+    }
+
+    return(
+      <div>
+      <table>
+        <tbody>
+      <Posts  posts={currentPost} />
+      </tbody>
+      <tfoot>
+      <Pagination postPerPage={postPerPage} totalPosts={KomentarRoom.length} paginate={paginate} />
+      </tfoot>
+      </table>
+      <button className="btn btn-info mt-3" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
+      </div>
+     );   
+  
+
+
+
+    /*
     const list = KomentarRoom.map((k)=>
     (
      <li key={k.Id}><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li>
@@ -187,6 +240,7 @@ function ModalKomentarData()
         <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
         </div>
     );
+    */
 }
 
 function ModalUnosKomentar()
@@ -207,7 +261,7 @@ function ModalRacunStudent()
   if(!studentRacun) return(<h3>Student nema račun!</h3>)
 
   const racuni = studentRacun.map((racun)=>(
-    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno == 0 ? <button className="btn btn-danger" disabled>Račun nije proknjižen!</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
+    <h4 key={racun.Id}>{racun.DatumUplate} : {racun.Iznos} kn {racun.Placeno === "0" ? <button className="btn btn-danger" disabled>Račun nije proknjižen!</button>: <button className="btn btn-success" disabled>Plačeno</button>}</h4>
 
   ));
   return  (<div>{racuni}</div>);
@@ -215,6 +269,8 @@ function ModalRacunStudent()
 
 const handleSubmit = (event) => {
   event.preventDefault();
+  let date = new Date();
+  let fulldatum =  date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+ " " + date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
   axios({
     method: "post",
     url: readUrl,
@@ -223,7 +279,8 @@ const handleSubmit = (event) => {
       "SobaId":RoomInfo.Soba.Id,
       "Vlasnik":"Student",
       "VlasnikId":RoomInfo.Studenti.Id,
-      "Komentar":event.target.Komentar.value
+      "Komentar":event.target.Komentar.value,
+      "VrijemeUnosa":fulldatum
     } 
     ,
     headers: { "Content-Type": "multipart/form-data"},

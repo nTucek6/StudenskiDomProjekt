@@ -14,6 +14,8 @@ export default function PocetnaAdmin()
   const [modalOdabirStudent, setModalOdabirStudent] = useState(false);
   const [modalRacunStudent, setmodalRacunStudent] = useState(false);
  // const [inputs,setInputs] = useState({});
+ const [currentPage,setCurrentPage] = useState(1);
+ const [postPerPage] = useState(5);
   
   
   const [RoomInfo,setRoomInfo] = useState();
@@ -234,6 +236,8 @@ openKomentarModal();
 
 const handleSubmit = (event) => {
     event.preventDefault();
+    let date = new Date();
+    let fulldatum =  date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()+ " " + date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
     axios({
       method: "post",
       url: readUrl,
@@ -242,7 +246,8 @@ const handleSubmit = (event) => {
         "SobaId":RoomInfo.Soba.Id,
         "Vlasnik":"Voditelj",
         "VlasnikId":1,
-        "Komentar":event.target.Komentar.value
+        "Komentar":event.target.Komentar.value,
+        "VrijemeUnosa":fulldatum
       } 
       ,
       headers: { "Content-Type": "multipart/form-data"},
@@ -413,13 +418,49 @@ function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
         return (<><h3>Soba ne sadrži ni jedan komentar</h3>  <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button></>);
     }
 
+    //////////////////////////////////////////
+
+    const Posts =({posts}) => 
+    {
+      const list = posts.map((k) => (
+        <tr key={k.Id}><td><li><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar} | Vrijeme unosa: {k.VrijemeUnosa}</li></td></tr>
+              ));
+              return list;
+    }
+
+    const indexOfLastPost = currentPage * postPerPage;
+    const indexOfFirstPost = indexOfLastPost - postPerPage;
+    const currentPost = KomentarRoom.slice(indexOfFirstPost,indexOfLastPost);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
+    {
+      const pageNumbers = [];
+      for(let i=1; i<=Math.ceil(totalPosts/postPerPage);i++)
+      {
+        pageNumbers.push(i);
+      }
+      return(
+          <tr className="pagination">
+        {pageNumbers.map(number =>(
+          <td key={number} className="page-item">
+            <button onClick={()=>paginate(number)} href='' className="page-link">{number}</button>
+          </td>
+        ))}
+          </tr>
+      )
+    }
+
+
+////////////////////////////////////////////////////
+/*
     const list = KomentarRoom.map((k)=>
     (
      <li key={k.Id}><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li>
-    ));
+    )); */
 
 
-
+/*
     return(
         <div>
         <ul>
@@ -427,7 +468,21 @@ function ModalKomentarData() //Ispis komentara u modal komentar ako postoje
         </ul>
         <button className="btn btn-info" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
         </div>
-    );
+    ); */
+   return(
+    <div>
+    <table>
+      <tbody>
+    <Posts  posts={currentPost} />
+    </tbody>
+    <tfoot>
+    <Pagination postPerPage={postPerPage} totalPosts={KomentarRoom.length} paginate={paginate} />
+    </tfoot>
+    </table>
+    <button className="btn btn-info mt-3" onClick={()=>openUnosKomentarModal()}>Unesite novi komentar</button>
+    </div>
+   );   
+
 }
 
 function ModalUnosKomentar()
