@@ -9,7 +9,7 @@ export default function StudentBezSobe()
     const [SlobodneSobe,setSlobodneSobe] = useState(null);
     const [student,setStudent] = useState(null);
     const [soba,setSoba] = useState();
-    const [sviStudenti,setsviStudenti] = useState();
+    const [searchReturn,setSearchReturn] = useState();
     
     const [modalIsOpen, setIsOpen] = useState(false);
     const [currentPage,setCurrentPage] = useState(1);
@@ -32,6 +32,7 @@ export default function StudentBezSobe()
                   })
                     .then(function (response) {
                         setData(response.data);
+                        setSearchReturn(response.data);
                       //console.log(response);
                     })
                     .catch(function (response) {
@@ -106,7 +107,7 @@ export default function StudentBezSobe()
 
           const indexOfLastPost = currentPage * postPerPage;
           const indexOfFirstPost = indexOfLastPost - postPerPage;
-          const currentPost = studenti.slice(indexOfFirstPost,indexOfLastPost);
+          const currentPost = searchReturn.slice(indexOfFirstPost,indexOfLastPost);
           const paginate = (pageNumber) => setCurrentPage(pageNumber);
       
           const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
@@ -177,13 +178,28 @@ export default function StudentBezSobe()
                       UcitajPodatke();
                       
                       <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
-                      //Posts(studenti.slice(indexOfFirstPost,indexOfLastPost),(postPerPage*currentPage)-9);
-                     // Pagination(postPerPage,studenti.length,paginate);
                   }
                 }
 
-        return(          
-        <table className="container table mt-5">
+                const searchItems = (searchText) => {
+                  if(searchText !== "")
+                  {
+                    const searchData = studenti.filter(i =>{return (i.Ime + " " + i.Prezime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || (i.Prezime + " " + i.Ime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || i.OIB.includes(searchText)});
+                    setSearchReturn(searchData);
+                      
+                  }
+                  else
+                  {
+                    setSearchReturn(studenti);
+                  }
+                  
+              };
+
+
+        return(
+          <>
+          <div className="mt-5 text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} placeholder="Search..." /></div>          
+        <table className="container table ">
             <thead>
                 <tr className="text-center">
                     <th>Rbr</th>
@@ -197,10 +213,10 @@ export default function StudentBezSobe()
             <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
             </tbody>
             <tfoot>
-            <Pagination postPerPage={postPerPage} totalPosts={studenti.length} paginate={paginate} />
+            <Pagination postPerPage={postPerPage} totalPosts={searchReturn.length} paginate={paginate} />
             </tfoot>
             {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Odaberite sobu:",null)}
-        </table>);
+        </table></>);
         
 }
 

@@ -262,8 +262,8 @@ function CloseAllModal()
         <h3>Kat: {VratiKat(RoomInfo.Soba.Kat)}</h3>
         <h3>Broj studenta po sobi: {RoomInfo.Soba.BrojMjesta}</h3>
         <h3>Tip: {VrstaSobe(RoomInfo.Soba.Tip)}</h3>
-        <button className="btn btn-primary mt-3 marginButtons" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
-        <button className="btn btn-primary mt-3 marginButtons" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
+        <button className="btn btn-info mt-3 marginButtons" onClick={()=>GetRoomKomentar(RoomInfo.Soba.Id)}>Komentari</button>
+        <button className="btn btn-info mt-3 marginButtons" onClick={()=>GetStudentRacun(RoomInfo.Studenti.Id)}>Racuni</button>
         </div>
        </div>
        {ShowModal(modalKomentar,closeKomentarModal,customStyles,ModalKomentarData,"Komentari",null)}

@@ -10,14 +10,12 @@ export default function StudentiPoSobama()
 {
     const [sobe, setData] = useState(null);
     const [BrisanjeOdabir,setDeleteStudent] = useState(null);
-    const [search, setSearch] = useState('');
     const [searchReturn,setSearchReturn] = useState();
 
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(15);
     const [modalIsOpen, setIsOpen] = useState(false);
 
-    //const [studentiPoSobi,setSPS] = useState(null);
     const readUrl = "http://localhost/studenskidom/php/read.php";
     useEffect(() => {UcitajPodatke();}, []);
     async function UcitajPodatke()
@@ -34,10 +32,9 @@ export default function StudentiPoSobama()
                   })
                     .then(function (response) {
                         setData(response.data);
-                      //console.log(response);
+                        setSearchReturn(response.data);
                     })
                     .catch(function (response) {
-                      //handle error
                       console.log(response);
                     });   
         }
@@ -46,7 +43,6 @@ export default function StudentiPoSobama()
     {
         return null;
     }
-
 
     const customStyles = {
       content: {
@@ -59,12 +55,9 @@ export default function StudentiPoSobama()
       },
     };
 
-
-   
     function openModal() {
       setIsOpen(true);
     }
-  
     function closeModal() {
       setIsOpen(false);
     }
@@ -98,12 +91,10 @@ export default function StudentiPoSobama()
     else
     {
       alert("U sobi ne postoje studenti za brisanje");
-    }
-     
+    }     
    }
 
-
-      const Posts =({posts,i}) => 
+      const Posts =({posts,i}) => //Ispis odredeni broj stavki na jednoj stranici
       {
         let list = posts.map((soba) => (
             <tr key={soba.Soba.Id.toString()} className="text-center" >
@@ -118,11 +109,10 @@ export default function StudentiPoSobama()
           return list;
       }
 
-  const indexOfLastPost = currentPage * postPerPage;
-  const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPost = sobe.slice(indexOfFirstPost,indexOfLastPost);
+  let indexOfLastPost = currentPage * postPerPage;
+  let indexOfFirstPost = indexOfLastPost - postPerPage;
+  let currentPost = searchReturn.slice(indexOfFirstPost,indexOfLastPost);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
   {
     const pageNumbers = [];
@@ -152,7 +142,6 @@ export default function StudentiPoSobama()
          {BrisanjeOdabir.map((student)=>(<button key={student.Id} className="btn btn-warning marginButtons" onClick={()=>DeleteStudent(student.Id)}>{student.Ime + " " + student.Prezime}</button>))}
        </div>)
     
-//<li key={student.Id}>{student.Ime + " " + student.Prezime}</li>
   }
 
   function DeleteStudent(StudentId)
@@ -166,50 +155,37 @@ export default function StudentiPoSobama()
         {
             "json":"DeleteStudentFromRoom",
             "StudentId":StudentId
-         
         },
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then(function (response) {
           console.log(response.data);
-         // navigate("/sobe");
         })
         .catch(function (response) {
-          //handle error
           console.log(response);
         }); 
         closeModal();
-       // window.location.reload(false); 
        UcitajPodatke();
        <Posts  posts={sobe.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
     }
-    
   }
 
-
-
-  // dovrsiti moram
+//pretraga po studentima i broju sobe
   const searchItems = (searchText) => {
-    setSearch(searchText);
-    
       if(searchText !== "")
       {
-        const searchData =  sobe.filter((item) => {
-          return Object.values(item).join('').toLowerCase().includes(search.toLowerCase())})
-          setSearchReturn(searchData);
+        const searchData = sobe.filter(i =>{return i.Studenti.toLowerCase().includes(searchText.toLowerCase()) || i.Soba.BrojSobe.includes(searchText)});
+        setSearchReturn(searchData); 
       }
       else
       {
         setSearchReturn(sobe);
       }
-      
   };
-
-console.log(searchReturn);
 
     return(
       <div className="container mt-5">
-        <div className="text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} /></div>
+      <div className="text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} placeholder="Search..." /></div>
       <div className="table-responsive">
       <table className="table" >
       <thead>
@@ -227,7 +203,7 @@ console.log(searchReturn);
       <Posts  posts={currentPost} i={(postPerPage*currentPage)-14}/>
       </tbody>
       <tfoot>
-      <Pagination postPerPage={postPerPage} totalPosts={sobe.length} paginate={paginate} />
+      <Pagination postPerPage={postPerPage} totalPosts={searchReturn.length} paginate={paginate} />
       </tfoot>
       </table>
       </div>
@@ -235,23 +211,6 @@ console.log(searchReturn);
       </div>
       );
 }
-
-/*
-<Modal
-             isOpen={modalIsOpen}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="Delete Student">
-             <h2 >Odaberite studenta kojega želite ukloniti iz sobe</h2>
-              <ModalData />
-             <div className="mt-4 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger p-2" onClick={closeModal}>Close</button>
-             </div>
-           </Modal>
-
-*/
 
 
 
