@@ -10,7 +10,8 @@ export default function StudentiPoSobama()
 {
     const [sobe, setData] = useState(null);
     const [BrisanjeOdabir,setDeleteStudent] = useState(null);
-   // const navigate = useNavigate();
+    const [search, setSearch] = useState('');
+    const [searchReturn,setSearchReturn] = useState();
 
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(15);
@@ -178,14 +179,37 @@ export default function StudentiPoSobama()
           console.log(response);
         }); 
         closeModal();
-        window.location.reload(false); 
+       // window.location.reload(false); 
+       UcitajPodatke();
+       <Posts  posts={sobe.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
     }
     
   }
 
 
+
+  // dovrsiti moram
+  const searchItems = (searchText) => {
+    setSearch(searchText);
+    
+      if(searchText !== "")
+      {
+        const searchData =  sobe.filter((item) => {
+          return Object.values(item).join('').toLowerCase().includes(search.toLowerCase())})
+          setSearchReturn(searchData);
+      }
+      else
+      {
+        setSearchReturn(sobe);
+      }
+      
+  };
+
+console.log(searchReturn);
+
     return(
       <div className="container mt-5">
+        <div className="text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} /></div>
       <div className="table-responsive">
       <table className="table" >
       <thead>

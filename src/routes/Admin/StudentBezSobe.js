@@ -173,7 +173,12 @@ export default function StudentBezSobe()
                         console.log(response);
                       });
                       closeModal();
-                      window.location.reload(false); 
+                      //window.location.reload(false); 
+                      UcitajPodatke();
+                      
+                      <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
+                      //Posts(studenti.slice(indexOfFirstPost,indexOfLastPost),(postPerPage*currentPage)-9);
+                     // Pagination(postPerPage,studenti.length,paginate);
                   }
                 }
 
