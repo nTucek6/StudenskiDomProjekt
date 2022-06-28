@@ -415,7 +415,7 @@ switch ($_POST['json']) {
                                         echo json_encode($SobaStudentInfo);
                                     break;
                                     case 'GetRoomKomentar':
-                                        $query = "Select * from sobakomentar where SobaId=".$_POST['SobaId'];
+                                        $query = "Select * from sobakomentar where SobaId=".$_POST['SobaId']." Group By VrijemeUnosa DESC";
                                         $result = $oConnection->query($query);
                                         $oKomentari = array();
                                         while($oRow = $result->fetch(PDO::FETCH_BOTH))

@@ -159,14 +159,15 @@ export default function StudentiPoSobama()
         headers: { "Content-Type": "multipart/form-data" },
       })
         .then(function (response) {
-          console.log(response.data);
+          //console.log(response.data);
+          UcitajPodatke();
+          <Posts  posts={sobe.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
         })
         .catch(function (response) {
           console.log(response);
         }); 
         closeModal();
-       UcitajPodatke();
-       <Posts  posts={sobe.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
+      
     }
   }
 

@@ -167,7 +167,9 @@ export default function StudentBezSobe()
                       headers: { "Content-Type": "multipart/form-data" },
                     })
                       .then(function (response) {
-                        console.log(response.data);
+                       // console.log(response.data);
+                       UcitajPodatke();
+                      <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
                       })
                       .catch(function (response) {
                         //handle error
@@ -175,9 +177,7 @@ export default function StudentBezSobe()
                       });
                       closeModal();
                       //window.location.reload(false); 
-                      UcitajPodatke();
                       
-                      <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
                   }
                 }
 

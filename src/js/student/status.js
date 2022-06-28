@@ -181,7 +181,7 @@ function ModalKomentarData()
     const Posts =({posts}) => 
     {
       const list = posts.map((k) => (
-        <tr key={k.Id}><td><li><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar} | Vrijeme unosa: {k.VrijemeUnosa}</li></td></tr>
+        <tr key={k.Id}><td><li><span className="komentarStyle">{k.Vlasnik}</span>: {k.Komentar}</li></td><td>Vrijeme unosa: {k.VrijemeUnosa}</td></tr>
               ));
               return list;
     }
@@ -210,8 +210,8 @@ function ModalKomentarData()
     }
 
     return(
-      <div>
-      <table>
+      <div className="mt-4">
+      <table className="table table-sm">
         <tbody>
       <Posts  posts={currentPost} />
       </tbody>
