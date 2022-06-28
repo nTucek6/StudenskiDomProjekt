@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 27, 2022 at 01:03 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- Host: 127.0.0.1:3306
+-- Generation Time: Jun 28, 2022 at 04:10 PM
+-- Server version: 5.7.31
+-- PHP Version: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,13 +27,15 @@ SET time_zone = "+00:00";
 -- Table structure for table `dodatnipodacistudent`
 --
 
-CREATE TABLE `dodatnipodacistudent` (
-  `Id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `dodatnipodacistudent`;
+CREATE TABLE IF NOT EXISTS `dodatnipodacistudent` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `StudentId` int(11) NOT NULL,
   `Adresa` varchar(50) NOT NULL,
   `PBR` int(11) NOT NULL,
-  `Grad` varchar(50) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `Grad` varchar(50) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `dodatnipodacistudent`
@@ -45,7 +47,12 @@ INSERT INTO `dodatnipodacistudent` (`Id`, `StudentId`, `Adresa`, `PBR`, `Grad`) 
 (3, 3, ' Zajčeva 2', 21000, 'Split'),
 (4, 4, 'Trg V. Lisinskog 3', 31000, 'Osijek'),
 (5, 5, 'Vinkovačka 3', 31000, 'Osijek'),
-(6, 6, 'Trg pobjede 3', 35000, 'Slavonski Brod');
+(6, 6, 'Trg pobjede 3', 35000, 'Slavonski Brod'),
+(7, 7, 'Ulica Vladana Desnice 68', 77184, 'Supetar '),
+(8, 8, 'Osječka ulica 81', 53312, 'Obrovac'),
+(9, 9, 'Ulica Petra Drapšina 49', 65769, 'Bjelovar'),
+(10, 10, 'Ulica Ivana Milutinovića 38', 36360, 'Buzet '),
+(11, 11, 'Ulica Frana Krste Frankopana 36', 67027, 'Crikvenica');
 
 -- --------------------------------------------------------
 
@@ -53,11 +60,13 @@ INSERT INTO `dodatnipodacistudent` (`Id`, `StudentId`, `Adresa`, `PBR`, `Grad`) 
 -- Table structure for table `studentbodovi`
 --
 
-CREATE TABLE `studentbodovi` (
-  `Id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `studentbodovi`;
+CREATE TABLE IF NOT EXISTS `studentbodovi` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `StudentId` int(11) NOT NULL,
-  `BrojBodova` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `BrojBodova` int(11) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `studentbodovi`
@@ -69,7 +78,12 @@ INSERT INTO `studentbodovi` (`Id`, `StudentId`, `BrojBodova`) VALUES
 (3, 3, 1200),
 (4, 4, 1350),
 (5, 5, 1850),
-(6, 6, 900);
+(6, 6, 900),
+(7, 7, 1025),
+(8, 8, 1545),
+(9, 9, 1375),
+(10, 10, 1650),
+(11, 11, 1537);
 
 -- --------------------------------------------------------
 
@@ -77,14 +91,16 @@ INSERT INTO `studentbodovi` (`Id`, `StudentId`, `BrojBodova`) VALUES
 -- Table structure for table `studenti`
 --
 
-CREATE TABLE `studenti` (
-  `Id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `studenti`;
+CREATE TABLE IF NOT EXISTS `studenti` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Ime` varchar(50) NOT NULL,
   `Prezime` varchar(50) NOT NULL,
   `Spol` varchar(1) NOT NULL,
   `JMBAG` varchar(10) DEFAULT NULL,
-  `OIB` varchar(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `OIB` varchar(11) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `studenti`
@@ -96,51 +112,12 @@ INSERT INTO `studenti` (`Id`, `Ime`, `Prezime`, `Spol`, `JMBAG`, `OIB`) VALUES
 (3, 'Lana', 'Bogdanović', 'F', '0307017138', '03090171073'),
 (4, 'Manuela', 'Pavić', 'F', '0307017605', '08858903235'),
 (5, 'Patrik', 'Grgić', 'M', '0307017478', '07845704958'),
-(6, 'Katja', 'Bogdanić', 'F', '0307017369', '10466940639');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `dodatnipodacistudent`
---
-ALTER TABLE `dodatnipodacistudent`
-  ADD PRIMARY KEY (`Id`);
-
---
--- Indexes for table `studentbodovi`
---
-ALTER TABLE `studentbodovi`
-  ADD PRIMARY KEY (`Id`);
-
---
--- Indexes for table `studenti`
---
-ALTER TABLE `studenti`
-  ADD PRIMARY KEY (`Id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `dodatnipodacistudent`
---
-ALTER TABLE `dodatnipodacistudent`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `studentbodovi`
---
-ALTER TABLE `studentbodovi`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `studenti`
---
-ALTER TABLE `studenti`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+(6, 'Katja', 'Bogdanić', 'F', '0307017369', '10466940639'),
+(7, 'Bruno', 'Kasun', 'M', '0307017267', '32950472560'),
+(8, 'Jelena', 'Mandžukić', 'F', '0307018753', '66800908559'),
+(9, 'Andrea', 'Vuka', 'F', '0307017759', '69111386081'),
+(10, 'Patricia', 'Filipović', 'F', '0307018451', '91105256592'),
+(11, 'Antonija', 'Franjić', 'F', '0307018508', '98710844308');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

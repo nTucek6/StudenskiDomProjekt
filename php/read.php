@@ -298,7 +298,7 @@ switch ($_POST['json']) {
                                 break;
 
                                 case 'listacekanja':
-                                    $query = "Select studenti.Id,studenti.Ime,studenti.Prezime,studenti.Spol,studenti.OIB,studenti.Upisan,studentbodovi.BrojBodova from studenti LEFT JOIN studentbodovi on studentbodovi.StudentId = studenti.Id where Upisan = 0 ORDER BY studentbodovi.StudentId DESC;";
+                                    $query = "Select studenti.Id,studenti.Ime,studenti.Prezime,studenti.Spol,studenti.OIB,studenti.Upisan,studentbodovi.BrojBodova from studenti LEFT JOIN studentbodovi on studentbodovi.StudentId = studenti.Id where Upisan = 0 ORDER BY studentbodovi.BrojBodova DESC;";
                                     //echo $query;
                                     $result = $oConnection->query($query);
                                     $studenti = array();
@@ -511,8 +511,21 @@ switch ($_POST['json']) {
                                             {
                                                 echo json_encode("Operation unsuccessful");
                                             }
-
                                         break;
+                                        case 'UpisJednogStudentaUDom':
+
+                                            $query = "Update studenti set Upisan=1 Where Id=".$_POST['StudentId'];
+                                            $result = $oConnection->query($query);
+                                            if($result->rowCount()>0)
+                                            {
+                                                echo json_encode("Operation successful");
+                                            }
+                                            else
+                                            {
+                                                echo json_encode("Operation unsuccessful");
+                                            }
+
+                                            break;
 
 }
 }

@@ -1,8 +1,9 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
-import {useNavigate } from 'react-router-dom';
+//import {useNavigate } from 'react-router-dom';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import React from 'react';
+import addbnt from '../../img/add.png';
 
 
 
@@ -44,6 +45,36 @@ export default function ListaCekanja()
 
         if(!studenti) {return(<h3 className="text-center mt-3">Lista za čekanje je prazna.</h3>)}
 
+
+        function UpisJednogStudenta(StudentId,NazivS)
+        {
+          if(window.confirm("Ovo akcijom upisujete "+NazivS+" u studenski dom"))
+          {
+            axios({
+              method: "post",
+              url: readUrl,
+              data: 
+              {
+                  "json":"UpisJednogStudentaUDom",
+                  "StudentId":StudentId
+              },
+              headers: { "Content-Type": "multipart/form-data" },
+            })
+              .then(function (response) {
+                console.log(response.data);
+                UcitajPodatke();
+                <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
+              
+              })
+              .catch(function (response) {
+                console.log(response);
+              }); 
+
+          }
+        }
+
+
+
         const Posts =({posts,i}) => 
         {
           const list = posts.map((student) => (
@@ -53,6 +84,7 @@ export default function ListaCekanja()
                   <td>{student.Prezime}</td>
                   <td>{student.OIB}</td>
                   <td>{student.BrojBodova}</td>
+                  <td><img id="BtnHover" alt="" src={addbnt} onClick={()=>UpisJednogStudenta(student.Id,(student.Ime+" "+student.Prezime))}/></td>
               </tr>
                   ));
                   return list;
@@ -90,7 +122,9 @@ export default function ListaCekanja()
             {
               if(response.data === "Operation successful")
               {
-                window.location.reload();
+               // window.location.reload();
+               UcitajPodatke();
+              <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
               }
               else
               {

@@ -71,15 +71,11 @@ color:red;
 {
  /* display: inline;
   position: absolute;
-  right: 0; */
-  display: inline;
+  right: 0; 
+  display: inline; */
   float: right;
   
-
-   
-  
 }
-
 #logo
 {
   height: 45px;
