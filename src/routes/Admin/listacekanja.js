@@ -5,16 +5,11 @@ import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.m
 import React from 'react';
 import addbnt from '../../img/add.png';
 
-
-
-
 export default function ListaCekanja()
 {
     const [studenti, setData] = useState(null);
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(10);
-
-   // const navigate = useNavigate();
 
     const readUrl = "http://localhost/studenskidom/php/read.php";
 
@@ -41,10 +36,7 @@ export default function ListaCekanja()
                     });   
         }
 
-        
-
         if(!studenti) {return(<h3 className="text-center mt-3">Lista za čekanje je prazna.</h3>)}
-
 
         function UpisJednogStudenta(StudentId,NazivS)
         {
@@ -61,10 +53,21 @@ export default function ListaCekanja()
               headers: { "Content-Type": "multipart/form-data" },
             })
               .then(function (response) {
-                console.log(response.data);
-                UcitajPodatke();
-                <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
-              
+                if(response.data === "Operation successful")
+                {
+                  console.log(response.data);
+                  UcitajPodatke();
+                  <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
+                }
+                else if(response.data === "No room")
+                {
+                  alert("Studentki dom je pun!");
+                }
+                else if(response.data === "Operation unsuccessful")
+                {
+                  alert("error!");
+                }
+      
               })
               .catch(function (response) {
                 console.log(response);
@@ -72,9 +75,6 @@ export default function ListaCekanja()
 
           }
         }
-
-
-
         const Posts =({posts,i}) => 
         {
           const list = posts.map((student) => (
@@ -123,24 +123,22 @@ export default function ListaCekanja()
               if(response.data === "Operation successful")
               {
                // window.location.reload();
+               console.log(response.data);
                UcitajPodatke();
               <Posts  posts={currentPost} i={(postPerPage*currentPage)-9}/>
               }
-              else
+              else if(response.data === "Operation unsuccessful")
               {
-                alert("Error");
+                alert("Studentski dom je pun!");
               }
-             // console.log(response.data);
             })
             .catch(function (response) 
             {
               console.log(response);
             });
             
-           // navigate("/studenti");
-          }
-      
-          
+       
+          } 
         }
 
         return(
@@ -161,27 +159,8 @@ export default function ListaCekanja()
                 <tfoot>
                 <Pagination postPerPage={postPerPage} totalPosts={studenti.length} paginate={paginate} />
                 </tfoot>
-           
             </table>
             <div className="text-center"><button className="btn btn-primary" onClick={()=>UpisUDom()}>Upiši u studenski dom</button></div>
-             
              </>
             );
-
-
 }
-
-/*
-<Modal
-isOpen={modalIsOpen}
-//onAfterOpen={afterOpenModal}
-onRequestClose={closeModal}
-style={customStyles}
-ariaHideApp={false}
-contentLabel="Delete Student">
-<h2 >Odaberite sobu:</h2>
- <ModalData />
-<div className="mt-2">
-<button onClick={closeModal}>Close</button>
-</div>
-</Modal> */

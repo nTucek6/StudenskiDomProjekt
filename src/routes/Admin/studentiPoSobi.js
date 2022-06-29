@@ -184,9 +184,36 @@ export default function StudentiPoSobama()
       }
   };
 
+  function ClearRooms()
+  {
+    if(window.confirm("Ispraznite sve sobe?"))
+    {
+      axios({
+        method: "post",
+        url: readUrl,
+        data: 
+        {
+            "json":"ClearRooms",
+        },
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+        .then(function (response) {
+          //console.log(response.data);
+          UcitajPodatke();
+          <Posts  posts={sobe.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>
+        })
+        .catch(function (response) {
+          console.log(response);
+        }); 
+
+  }
+}
+
+
     return(
       <div className="container mt-5">
-      <div className="text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} placeholder="Search..." /></div>
+      <div className="text-center"><input type="text" onChange={(e) => searchItems(e.target.value)} placeholder="Search..." />
+      </div>
       <div className="table-responsive">
       <table className="table" >
       <thead>
@@ -207,16 +234,12 @@ export default function StudentiPoSobama()
       <Pagination postPerPage={postPerPage} totalPosts={searchReturn.length} paginate={paginate} />
       </tfoot>
       </table>
+      <div className="text-center">
+      <button className="btn btn-danger" onClick={()=>ClearRooms()}>Isprazni sve sobe</button>
+      </div>
       </div>
       {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Odaberite studenta kojega želite ukloniti iz sobe:",null)}
       </div>
       );
 }
-
-
-
-
-
-
-
 

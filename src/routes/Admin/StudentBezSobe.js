@@ -1,6 +1,7 @@
 import axios from "axios";
 import {useState, useEffect} from 'react';
 import addbnt from '../../img/add.png';
+import dellbtn from '../../img/trash-can.png'
 import ShowModal from "../../js/components/Modal";
 
 export default function StudentBezSobe()
@@ -100,6 +101,7 @@ export default function StudentBezSobe()
                     <td>{student.Prezime}</td>
                     <td>{student.OIB}</td>
                     <td><img id="BtnHover" alt="" src={addbnt} onClick={()=>AfterClick(student.Id)} /></td>
+                    <td><img id="BtnHover" alt="" src={dellbtn} onClick={()=>IspisIzDoma(student.Id)} /></td>
                 </tr>
                     ));
                     return list;
@@ -154,7 +156,6 @@ export default function StudentBezSobe()
                   }
                   else
                   {
-                  
                     axios({
                       method: "post",
                       url: readUrl,
@@ -176,24 +177,89 @@ export default function StudentBezSobe()
                         console.log(response);
                       });
                       closeModal();
-                      //window.location.reload(false); 
-                      
+                      //window.location.reload(false);  
                   }
+                }
+
+                function IspisIzDoma(StudentId)
+                {
+                  if(window.confirm("Jeste li sigurni za odabir?"))
+                  {
+                    axios({
+                      method: "post",
+                      url: readUrl,
+                      data: 
+                      {
+                          "json":"RemoveStudentDom",
+                          "StudentId":StudentId
+                 
+                      },
+                      headers: { "Content-Type": "multipart/form-data" },
+                    })
+                      .then(function (response) {
+                       // console.log(response.data);
+                       if(!studenti){}
+                       else { UcitajPodatke();
+                        <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>}
+                      
+                      })
+                      .catch(function (response) {
+                        //handle error
+                        console.log(response);
+                      });
+                      closeModal();
+                      //window.location.reload(false);  
+                  }
+               
+
+
                 }
 
                 const searchItems = (searchText) => {
                   if(searchText !== "")
                   {
                     const searchData = studenti.filter(i =>{return (i.Ime + " " + i.Prezime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || (i.Prezime + " " + i.Ime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || i.OIB.includes(searchText)});
-                    setSearchReturn(searchData);
-                      
+                    setSearchReturn(searchData); 
                   }
                   else
                   {
                     setSearchReturn(studenti);
-                  }
-                  
+                  } 
               };
+
+        function IspisSvihStudenta()
+        {
+          if(window.confirm("Jeste li sigurni za odabir?"))
+          {
+            axios({
+              method: "post",
+              url: readUrl,
+              data: 
+              {
+                  "json":"RemoveStudentDomAll",
+                 
+         
+              },
+              headers: { "Content-Type": "multipart/form-data" },
+            })
+              .then(function (response) {
+               // console.log(response.data);
+               if(!studenti){}
+               else { UcitajPodatke();
+                <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>}
+              
+              })
+              .catch(function (response) {
+                //handle error
+                console.log(response);
+              });
+              closeModal();
+              //window.location.reload(false);  
+          }
+
+
+        }
+
 
 
         return(
@@ -207,6 +273,7 @@ export default function StudentBezSobe()
                     <th>Prezime</th>
                     <th>OIB</th>
                     <th>Dodaj studenta u sobu</th>
+                    <th>Ispis iz doma</th>
                 </tr>
             </thead>
             <tbody>
@@ -216,24 +283,9 @@ export default function StudentBezSobe()
             <Pagination postPerPage={postPerPage} totalPosts={searchReturn.length} paginate={paginate} />
             </tfoot>
             {ShowModal(modalIsOpen,closeModal,customStyles,ModalData,"Odaberite sobu:",null)}
-        </table></>);
-        
+        </table>
+        <div className="text-center">
+      <button className="btn btn-danger" onClick={()=>IspisSvihStudenta()}>Ispis svih studenata iz doma</button>
+      </div>
+        </>);     
 }
-
-/*
-
-<Modal
-             isOpen={modalIsOpen}
-             //onAfterOpen={afterOpenModal}
-             onRequestClose={closeModal}
-             style={customStyles}
-             ariaHideApp={false}
-             contentLabel="modal">
-             <h2 >Odaberite sobu:</h2>
-              <ModalData />
-             <div className="mt-4 d-flex flex-row-reverse">
-             <button className="btn btn-outline-danger p-2" onClick={closeModal}>Close</button>
-             </div>
-           </Modal>
-
-*/
