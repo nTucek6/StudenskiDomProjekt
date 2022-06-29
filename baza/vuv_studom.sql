@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 28, 2022 at 04:10 PM
+-- Generation Time: Jun 29, 2022 at 10:24 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `dodatnipodacistudent` (
   `PBR` int(5) NOT NULL,
   `Grad` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `dodatnipodacistudent`
@@ -116,7 +116,12 @@ INSERT INTO `dodatnipodacistudent` (`Id`, `StudentId`, `Adresa`, `PBR`, `Grad`) 
 (53, 57, 'Ulica Dositeja Obradovića 34', 31157, 'Beli Manastir '),
 (54, 58, 'Vinkovačka 3', 31000, 'Osijek'),
 (55, 59, 'Trg pobjede 3', 35000, 'Slavonski Brod'),
-(56, 60, 'Osječka ulica 81', 53312, 'Obrovac');
+(56, 60, 'Osječka ulica 81', 53312, 'Obrovac'),
+(57, 61, 'Ulica Petra Drapšina 49', 65769, 'Bjelovar'),
+(58, 62, 'Ulica Ivana Milutinovića 38', 36360, 'Buzet '),
+(59, 63, 'Ulica Frana Krste Frankopana 36', 67027, 'Crikvenica'),
+(60, 64, 'Ulica Tina Ujevića 97', 49914, 'Kutjevo '),
+(61, 65, 'Ulica Eugena Savojskog 85', 81331, 'Kutina ');
 
 -- --------------------------------------------------------
 
@@ -131,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `login` (
   `Lozinka` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `StudentId` int(11) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=67 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `login`
@@ -194,7 +199,12 @@ INSERT INTO `login` (`Id`, `Email`, `Lozinka`, `StudentId`) VALUES
 (63, 'sven.bozic@vuv.hr', 't4JZBt', 57),
 (64, 'patrik.grgic@vuv.hr', 'Kcne2m', 58),
 (65, 'katja.bogdanovic@vuv.hr', 'CeUL2p', 59),
-(66, 'jelena.mandzukic@vuv.hr', 'x6Xmgx', 60);
+(66, 'jelena.mandzukic@vuv.hr', 'x6Xmgx', 60),
+(67, 'andrea.vuka@vuv.hr', 'r2CunH', 61),
+(68, 'patricia.filipovic@vuv.hr', '1i9JdJ', 62),
+(69, 'antonija.franjic@vuv.hr', 'xDrw4U', 63),
+(70, 'martina.knezevic@vuv.hr', 'hjN8uj', 64),
+(71, 'josipa.perkovic@vuv.hr', 'd94MCG', 65);
 
 -- --------------------------------------------------------
 
@@ -297,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `stanarinastudenti` (
   `DatumUplate` date NOT NULL,
   `Placeno` tinyint(4) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `stanarinastudenti`
@@ -312,7 +322,16 @@ INSERT INTO `stanarinastudenti` (`Id`, `StudentId`, `Iznos`, `DatumUplate`, `Pla
 (6, 1, '400.00', '2022-03-04', 1),
 (7, 1, '400.00', '2022-04-05', 1),
 (8, 1, '400.00', '2022-05-03', 1),
-(9, 1, '400.00', '2022-06-11', 1);
+(9, 1, '400.00', '2022-06-11', 1),
+(10, 2, '400.00', '2021-10-06', 1),
+(11, 2, '400.00', '2021-11-10', 1),
+(12, 2, '400.00', '2021-12-02', 1),
+(13, 2, '400.00', '2022-01-12', 1),
+(14, 2, '400.00', '2022-02-07', 1),
+(15, 2, '400.00', '2022-03-04', 1),
+(16, 2, '400.00', '2022-04-05', 1),
+(17, 2, '400.00', '2022-05-03', 1),
+(18, 2, '400.00', '2022-06-11', 0);
 
 -- --------------------------------------------------------
 
@@ -326,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `studentbodovi` (
   `StudentId` int(11) NOT NULL,
   `BrojBodova` int(11) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `studentbodovi`
@@ -339,7 +358,12 @@ INSERT INTO `studentbodovi` (`Id`, `StudentId`, `BrojBodova`) VALUES
 (18, 14, 1350),
 (19, 58, 1850),
 (20, 59, 900),
-(21, 60, 1545);
+(21, 60, 1545),
+(22, 61, 1375),
+(23, 62, 1650),
+(24, 63, 1537),
+(25, 64, 1026),
+(26, 65, 1769);
 
 -- --------------------------------------------------------
 
@@ -357,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `studenti` (
   `OIB` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
   `Upisan` tinyint(1) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `studenti`
@@ -420,7 +444,12 @@ INSERT INTO `studenti` (`Id`, `Ime`, `Prezime`, `Spol`, `JMBAG`, `OIB`, `Upisan`
 (57, 'Sven', 'Božić', 'M', '0307017003', '89239867772', 1),
 (58, 'Patrik', 'Grgić', 'M', '0307017478', '07845704958', 1),
 (59, 'Katja', 'Bogdanić', 'F', '0307017369', '10466940639', 1),
-(60, 'Jelena', 'Mandžukić', 'F', '0307018753', '66800908559', 1);
+(60, 'Jelena', 'Mandžukić', 'F', '0307018753', '66800908559', 1),
+(61, 'Andrea', 'Vuka', 'F', '0307017759', '69111386081', 1),
+(62, 'Patricia', 'Filipović', 'F', '0307018451', '91105256592', 1),
+(63, 'Antonija', 'Franjić', 'F', '0307018508', '98710844308', 1),
+(64, 'Martina', 'Knežević', 'F', '0307018385', '85343538477', 0),
+(65, 'Josipa', 'Perković', 'F', '0307018045', '08693156709', 1);
 
 -- --------------------------------------------------------
 
@@ -434,7 +463,7 @@ CREATE TABLE IF NOT EXISTS `studentposobi` (
   `SobaId` int(11) NOT NULL,
   `StudentId` int(11) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=109 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `studentposobi`
@@ -448,7 +477,6 @@ INSERT INTO `studentposobi` (`Id`, `SobaId`, `StudentId`) VALUES
 (54, 2, 9),
 (61, 5, 19),
 (43, 12, 2),
-(45, 1, 13),
 (56, 1, 14),
 (55, 3, 4),
 (48, 6, 10),
@@ -497,7 +525,11 @@ INSERT INTO `studentposobi` (`Id`, `SobaId`, `StudentId`) VALUES
 (105, 21, 57),
 (106, 7, 60),
 (107, 21, 58),
-(108, 7, 59);
+(108, 7, 59),
+(109, 31, 61),
+(110, 31, 62),
+(111, 32, 63),
+(112, 32, 65);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -572,16 +572,34 @@ echo json_encode("All room clear");
 break;
 
       case 'RemoveStudentDomAll':
-          $query = "Delete from studenti";
-          $result = $oConnection->query($query);
-          $query = "Delete from studentbodovi";
-          $result = $oConnection->query($query);
-          $query = "Delete from dodatnipodacistudent";
-          $result = $oConnection->query($query);
-          $query = "Delete from login";
-          $result = $oConnection->query($query);
-          $query = "Delete from login";
-          $result = $oConnection->query($query);
+
+        $query = "Select * from studentposobi";
+        $result = $oConnection->query($query);  
+            if($result->rowCount() == 0)
+            {
+                $query = "Delete from studenti";
+                $result = $oConnection->query($query);
+                $query = "Delete from studentbodovi";
+                $result = $oConnection->query($query);
+                $query = "Delete from dodatnipodacistudent";
+                $result = $oConnection->query($query);
+                $query = "Delete from login";
+                $result = $oConnection->query($query);
+
+                $query = "Select * from studenti";
+                $result = $oConnection->query($query);
+                if($result->rowCount() == 0)
+                {
+                  $query = "Delete from sobakomentar";
+                  $result = $oConnection->query($query);
+                  $query = "Delete from stanarinastudenti";
+                  $result = $oConnection->query($query);
+                }
+            }
+            else
+            {
+                echo json_encode("Error");
+            }         
           break;
 
 }

@@ -236,18 +236,21 @@ export default function StudentBezSobe()
               url: readUrl,
               data: 
               {
-                  "json":"RemoveStudentDomAll",
-                 
-         
+                  "json":"RemoveStudentDomAll"
               },
               headers: { "Content-Type": "multipart/form-data" },
             })
               .then(function (response) {
-               // console.log(response.data);
-               if(!studenti){}
-               else { UcitajPodatke();
-                <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>}
-              
+               if(response.data !== "Error")
+               {
+                if(!studenti){}
+                else { UcitajPodatke();
+                 <Posts  posts={studenti.slice(indexOfFirstPost,indexOfLastPost)} i={(postPerPage*currentPage)-9}/>}
+               }
+               else
+               {
+                alert("Operacija se može izvršiti kada se sobe isprazne!");
+               }
               })
               .catch(function (response) {
                 //handle error
