@@ -11,6 +11,7 @@ export default function StudentBezSobe()
     const [student,setStudent] = useState(null);
     const [soba,setSoba] = useState();
     const [searchReturn,setSearchReturn] = useState();
+    const [searchInfo,setSearchInfo] = useState(null);
     
     const [modalIsOpen, setIsOpen] = useState(false);
     const [currentPage,setCurrentPage] = useState(1);
@@ -94,6 +95,10 @@ export default function StudentBezSobe()
 
           const Posts =({posts,i}) => 
           {
+            if(posts.length < 10  && searchInfo !== "")
+            {
+              i = 1;
+            }
             const list = posts.map((student) => (
                 <tr key={student.Id.toString()} className="text-center">
                     <td>{i++}</td>
@@ -107,7 +112,17 @@ export default function StudentBezSobe()
                     return list;
           }
 
-          const indexOfLastPost = currentPage * postPerPage;
+          let indexOfLastPost; //= currentPage * postPerPage;
+          if(searchReturn.length <10 && searchInfo !== "")
+          {
+            indexOfLastPost = 1 * postPerPage;
+          }
+          else
+          {
+            indexOfLastPost= currentPage * postPerPage;
+          }
+
+          //const indexOfLastPost = currentPage * postPerPage;
           const indexOfFirstPost = indexOfLastPost - postPerPage;
           const currentPost = searchReturn.slice(indexOfFirstPost,indexOfLastPost);
           const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -216,6 +231,7 @@ export default function StudentBezSobe()
                 }
 
                 const searchItems = (searchText) => {
+                  setSearchInfo(searchText);
                   if(searchText !== "")
                   {
                     const searchData = studenti.filter(i =>{return (i.Ime + " " + i.Prezime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || (i.Prezime + " " + i.Ime).toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || i.OIB.includes(searchText)});
@@ -226,6 +242,8 @@ export default function StudentBezSobe()
                     setSearchReturn(studenti);
                   } 
               };
+
+            
 
         function IspisSvihStudenta()
         {
@@ -253,11 +271,9 @@ export default function StudentBezSobe()
                }
               })
               .catch(function (response) {
-                //handle error
                 console.log(response);
               });
               closeModal();
-              //window.location.reload(false);  
           }
 
 

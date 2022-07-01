@@ -11,6 +11,8 @@ export default function StudentiPoSobama()
     const [sobe, setData] = useState(null);
     const [BrisanjeOdabir,setDeleteStudent] = useState(null);
     const [searchReturn,setSearchReturn] = useState();
+    const [searchInfo,setSearchInfo] = useState(null);
+   
 
     const [currentPage,setCurrentPage] = useState(1);
     const [postPerPage] = useState(15);
@@ -96,6 +98,11 @@ export default function StudentiPoSobama()
 
       const Posts =({posts,i}) => //Ispis odredeni broj stavki na jednoj stranici
       {
+        if(posts.length < 10 && searchInfo !== "") //&& searchData
+        {
+          i = 1;
+        } 
+
         let list = posts.map((soba) => (
             <tr key={soba.Soba.Id.toString()} className="text-center" >
                 <td>{i++}</td>
@@ -109,9 +116,20 @@ export default function StudentiPoSobama()
           return list;
       }
 
-  let indexOfLastPost = currentPage * postPerPage;
+      //console.log(searchInfo);
+      let indexOfLastPost;// = currentPage * postPerPage;
+      if(searchReturn.length <10 && searchInfo !== "")
+      {
+        indexOfLastPost = 1 * postPerPage;
+      }
+      else
+      {
+        indexOfLastPost= currentPage * postPerPage;
+      }  
+
   let indexOfFirstPost = indexOfLastPost - postPerPage;
   let currentPost = searchReturn.slice(indexOfFirstPost,indexOfLastPost);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const Pagination = ({postPerPage,totalPosts,paginate}) => //funkcija radi broj stranica koliko je potrebno za ispis svih podataka
   {
@@ -173,16 +191,24 @@ export default function StudentiPoSobama()
 
 //pretraga po studentima i broju sobe
   const searchItems = (searchText) => {
+      setSearchInfo(searchText);
       if(searchText !== "")
       {
+      
         const searchData = sobe.filter(i =>{return i.Studenti.toLowerCase().includes(searchText.toLowerCase()) || i.Soba.BrojSobe.includes(searchText)});
-        setSearchReturn(searchData); 
+        
+        setSearchReturn(searchData);
+        //currentPost = searchReturn.slice(indexOfFirstPost,indexOfLastPost);
+       // <Posts  posts={currentPost} i={(postPerPage*currentPage)-14}/>
+       
       }
       else
       {
         setSearchReturn(sobe);
       }
   };
+
+
 
   function ClearRooms()
   {
